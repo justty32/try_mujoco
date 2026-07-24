@@ -1,0 +1,41 @@
+<mujoco model="three_cylinders_yaw_pitch">
+  <statistic center="0 0 0.5"/>
+  
+  <worldbody>
+    <!-- 地板與光源 -->
+    <geom name="floor" size="1 1 .05" type="plane" rgba="0.8 0.8 0.8 1"/>
+    <light pos="0 0 3"/>
+
+    <!-- 1. 底座圓柱體 (Base Cylinder) -->
+    <body name="base_cylinder" pos="0 0 0.2">
+      <geom name="base_geom" type="cylinder" size="0.1 0.2" rgba="0.2 0.6 0.8 1"/>
+
+      <!-- 2. 中間圓柱體 (Top Cylinder) - Yaw 旋轉 -->
+      <body name="top_cylinder" pos="0 0 0.3">
+        <!-- Yaw 關節 (繞 Z 軸) -->
+        <joint name="yaw_joint" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
+        <geom name="top_geom" type="cylinder" size="0.2 0.1" rgba="0.9 0.4 0.3 1"/>
+
+        <!-- 3. 最上層圓柱體 (Pitch Cylinder) - 朝向 X 軸 -->
+        <!-- 相對位置設在中間圓柱體上方 Z = 0.1 (中間半高) + 0.1 (新關節偏移) -->
+        <body name="pitch_cylinder" pos="0 0 0.2">
+          
+          <!-- 【關鍵 1】只能 Pitch 旋轉的關節 (繞 Y 軸旋轉) -->
+          <joint name="pitch_joint" type="hinge" axis="1 0 0" range="-60 60" limited="true"/>
+
+          <!-- 【關鍵 2】圓柱體朝向 X 軸 -->
+          <!-- euler="0 90 0" 代表將圓柱體繞 Y 軸轉動 90 度，使其原本指向 Z 的軸心轉為指向 X 軸 -->
+          <!-- size="0.05 0.2" 表示：半徑 0.05m，沿著 X 軸的半長度為 0.2m (總長 0.4m) -->
+          <geom name="pitch_geom" type="cylinder" size="0.05 0.2" euler="0 90 0" rgba="0.3 0.8 0.4 1"/>
+
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- 馬達驅動器 (可分別控制 Yaw 與 Pitch 關節) -->
+  <actuator>
+    <motor name="yaw_motor" joint="yaw_joint" gear="10"/>
+    <motor name="pitch_motor" joint="pitch_joint" gear="10"/>
+  </actuator>
+</mujoco>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>robot – API Reference</title>
+<style>
+:root {
+  --c-sim:     #2563eb;
+  --c-ctrl:    #16a34a;
+  --c-viewer:  #7c3aed;
+  --c-main:    #ea580c;
+  --c-motor:   #dc2626;   /* motor control highlight */
+  --c-monitor: #0891b2;   /* state monitor highlight */
+  --bg:        #f8fafc;
+  --surface:   #ffffff;
+  --text:      #1e293b;
+  --muted:     #64748b;
+  --border:    #e2e8f0;
+  --code-bg:   #f1f5f9;
+  --mono: 'Cascadia Code','Fira Code','Consolas',monospace;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.65; }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 230px 1fr; min-height: 100vh; }
+
+/* sidebar */
+nav {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  background: var(--surface); border-right: 1px solid var(--border);
+  padding: 1.25rem 0; font-size: 0.82rem;
+}
+.nav-logo { padding: 0 1.25rem 1rem; font-weight: 700; font-size: 0.95rem;
+            border-bottom: 1px solid var(--border); margin-bottom: 0.75rem; }
+.nav-group { margin-top: 0.75rem; }
+.nav-label { padding: 0 1.25rem 0.2rem; font-size: 0.68rem; font-weight: 700;
+             text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); }
+nav a { display: block; padding: 0.28rem 1.25rem; color: var(--muted);
+        text-decoration: none; border-left: 3px solid transparent; transition: all 0.12s; }
+nav a:hover { color: var(--text); background: var(--bg); }
+nav a.s  { color: var(--c-sim);    border-left-color: var(--c-sim); }
+nav a.c  { color: var(--c-ctrl);   border-left-color: var(--c-ctrl); }
+nav a.v  { color: var(--c-viewer); border-left-color: var(--c-viewer); }
+nav a.m  { color: var(--c-main);   border-left-color: var(--c-main); }
+nav a.sub { padding-left: 2rem; font-size: 0.79rem; }
+
+/* legend chips in sidebar */
+.nav-legend { padding: 0.75rem 1.25rem 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.leg { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--muted); }
+.leg-chip { font-size: 0.65rem; font-weight: 700; padding: 0.1em 0.5em;
+            border-radius: 3px; color: white; white-space: nowrap; }
+.chip-motor   { background: var(--c-motor); }
+.chip-monitor { background: var(--c-monitor); }
+
+/* content */
+main { padding: 2.5rem 3rem; max-width: 880px; }
+h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 0.4rem; }
+h2 { font-size: 1.3rem; font-weight: 700; margin: 2.75rem 0 1rem;
+     padding-bottom: 0.45rem; border-bottom: 2px solid var(--border); }
+h3 { font-size: 0.95rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+p  { margin-bottom: 0.7rem; font-size: 0.92rem; }
+ol, ul { margin: 0.5rem 0 0.75rem 1.4rem; font-size: 0.9rem; line-height: 2; }
+
+code { font-family: var(--mono); font-size: 0.84em; background: var(--code-bg);
+       padding: 0.12em 0.4em; border-radius: 3px; }
+pre  { font-family: var(--mono); font-size: 0.84rem; background: var(--code-bg);
+       padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto;
+       margin-bottom: 1rem; border: 1px solid var(--border); line-height: 1.55; }
+kbd  { font-family: var(--mono); font-size: 0.8em; background: var(--code-bg);
+       border: 1px solid var(--border); border-radius: 3px;
+       padding: 0.1em 0.45em; }
+
+/* module badge */
+.mod-badge { display: inline-block; font-size: 0.68rem; font-weight: 700;
+             text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2em 0.6em;
+             border-radius: 4px; color: white; margin-right: 0.5rem; }
+.b-sim    { background: var(--c-sim); }
+.b-ctrl   { background: var(--c-ctrl); }
+.b-viewer { background: var(--c-viewer); }
+.b-main   { background: var(--c-main); }
+
+/* role tag — appears on fn card header */
+.role { display: inline-flex; align-items: center; gap: 0.3rem;
+        font-size: 0.7rem; font-weight: 700; padding: 0.2em 0.6em;
+        border-radius: 3px; color: white; }
+.role-motor   { background: var(--c-motor); }
+.role-monitor { background: var(--c-monitor); }
+.role::before { content: ''; display: inline-block; width: 6px; height: 6px;
+                border-radius: 50%; background: rgba(255,255,255,0.7); }
+
+/* fn card */
+.fn-card { border: 1px solid var(--border); border-radius: 8px;
+           overflow: hidden; margin-bottom: 1rem; }
+.fn-head { display: flex; align-items: center; justify-content: space-between;
+           padding: 0.6rem 1rem; background: var(--code-bg);
+           border-bottom: 1px solid var(--border); gap: 0.75rem; flex-wrap: wrap; }
+.fn-sig  { font-family: var(--mono); font-size: 0.84rem; }
+.ret  { color: #7c3aed; }
+.fname { font-weight: 700; }
+.pt   { color: #0891b2; }
+.fn-body { padding: 0.875rem 1rem; background: var(--surface); }
+.fn-body p { font-size: 0.88rem; margin-bottom: 0.45rem; }
+.fn-body p:last-child { margin-bottom: 0; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin-bottom: 1rem; }
+th { text-align: left; padding: 0.4rem 0.75rem; background: var(--bg);
+     border: 1px solid var(--border); font-weight: 600; color: var(--muted);
+     font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+td { padding: 0.38rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
+td.mono { font-family: var(--mono); font-size: 0.82rem; color: #0891b2; white-space: nowrap; }
+tr:hover td { background: var(--bg); }
+
+/* callout boxes */
+.note    { background: #fef9c3; border-left: 3px solid #ca8a04;
+           padding: 0.55rem 0.9rem; border-radius: 0 4px 4px 0; font-size: 0.84rem; margin-top: 0.5rem; }
+.returns { background: #f0fdf4; border-left: 3px solid var(--c-ctrl);
+           padding: 0.5rem 0.9rem; border-radius: 0 4px 4px 0; font-size: 0.84rem; margin-top: 0.5rem; }
+.returns strong, .note strong { font-weight: 700; }
+
+/* dependency diagram */
+.dep { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+       padding: 1.5rem 2rem; background: var(--surface);
+       border: 1px solid var(--border); border-radius: 8px; margin: 1.25rem 0; }
+.dep-box { padding: 0.4rem 1rem; border-radius: 6px; font-family: var(--mono);
+           font-size: 0.88rem; font-weight: 700; color: white; }
+.dep-box.s  { background: var(--c-sim); }
+.dep-box.c  { background: var(--c-ctrl); }
+.dep-box.v  { background: var(--c-viewer); }
+.dep-box.m  { background: var(--c-main); }
+.dep-arr { color: var(--muted); font-size: 1.2rem; }
+.dep-note { width: 100%; font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+
+/* colour dot for quick ref */
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; }
+.d-s { background: var(--c-sim); } .d-c { background: var(--c-ctrl); }
+.d-v { background: var(--c-viewer); }
+
+/* section accent */
+#sim h2        { border-bottom-color: var(--c-sim); }
+#controller h2 { border-bottom-color: var(--c-ctrl); }
+#viewer h2     { border-bottom-color: var(--c-viewer); }
+#main-loop h2  { border-bottom-color: var(--c-main); }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ===== SIDEBAR ===== -->
+<nav>
+  <div class="nav-logo">robot / API docs</div>
+
+  <div class="nav-group">
+    <div class="nav-label">General</div>
+    <a href="#overview">Overview</a>
+    <a href="#quickref">Quick Reference</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">sim.h</div>
+    <a href="#sim" class="s">sim</a>
+    <a href="#sim_load"          class="s sub">sim_load</a>
+    <a href="#sim_unload"        class="s sub">sim_unload</a>
+    <a href="#sim_reset"         class="s sub">sim_reset</a>
+    <a href="#sim_step"          class="s sub">sim_step</a>
+    <a href="#sim_accessors"     class="s sub">sim_model / sim_data</a>
+    <a href="#sim_joint"         class="s sub">sim_joint_*</a>
+    <a href="#sim_body_pos"      class="s sub">sim_body_pos</a>
+    <a href="#sim_actuator"      class="s sub">sim_actuator_force</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">controller.h</div>
+    <a href="#controller" class="c">controller</a>
+    <a href="#ctrl_init"       class="c sub">ctrl_init</a>
+    <a href="#ctrl_phase"      class="c sub">ctrl_set/get_phase</a>
+    <a href="#ctrl_apply"      class="c sub">ctrl_apply</a>
+    <a href="#ctrl_set_motors" class="c sub">ctrl_set_motors</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">viewer.h</div>
+    <a href="#viewer" class="v">viewer</a>
+    <a href="#viewer_init"  class="v sub">viewer_init</a>
+    <a href="#viewer_free"  class="v sub">viewer_free</a>
+    <a href="#viewer_query" class="v sub">should_close / paused</a>
+    <a href="#viewer_render" class="v sub">viewer_render</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">main.c</div>
+    <a href="#main-loop" class="m">主迴圈</a>
+  </div>
+
+  <div class="nav-legend">
+    <div class="nav-label" style="padding:0 0 0.3rem;">圖例</div>
+    <div class="leg"><span class="leg-chip chip-motor">Motor Control</span>操控馬達</div>
+    <div class="leg"><span class="leg-chip chip-monitor">State Monitor</span>讀取狀態</div>
+  </div>
+</nav>
+
+<!-- ===== CONTENT ===== -->
+<main>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <h1>robot</h1>
+  <p style="color:var(--muted); margin-bottom:1.5rem;">
+    MuJoCo C 專案 · three_cylinders.xml · 控制 yaw / pitch motor，監控關節角度、位置與受力
+  </p>
+
+  <h2>架構</h2>
+  <p>四個模組，單向依賴，<code>sim</code> 在最底層，<code>main</code> 在最頂層。</p>
+  <div class="dep">
+    <span class="dep-box s">sim.c</span>
+    <span class="dep-arr">←</span>
+    <span class="dep-box c">controller.c</span>
+    <span class="dep-arr">←</span>
+    <span class="dep-box v">viewer.c</span>
+    <span class="dep-arr" style="opacity:.35">⠀⠀</span>
+    <span class="dep-box m">main.c</span>
+    <p class="dep-note">
+      箭頭 = 「被誰 include」。<code>sim</code> 不依賴任何人；<code>main</code> 依賴全部。<br>
+      <code>viewer.c</code> 的 callback 可直接呼叫 <code>sim_reset()</code> 與 <code>ctrl_set_phase()</code>，方向不倒流。
+    </p>
+  </div>
+
+  <h2>模型結構（three_cylinders.xml）</h2>
+  <table>
+    <tr><th>Body</th><th>Joint</th><th>Actuator</th><th>範圍</th></tr>
+    <tr><td class="mono">base_cylinder</td><td>—（固定在世界）</td><td>—</td><td>—</td></tr>
+    <tr><td class="mono">top_cylinder</td><td class="mono">yaw_joint（繞 Z）</td><td class="mono">yaw_motor [0]</td><td>±90°</td></tr>
+    <tr><td class="mono">pitch_cylinder</td><td class="mono">pitch_joint（繞 X）</td><td class="mono">pitch_motor [1]</td><td>±60°</td></tr>
+  </table>
+</section>
+
+<!-- QUICK REF -->
+<section id="quickref">
+  <h2>Quick Reference</h2>
+  <table>
+    <tr><th>函數</th><th>模組</th><th>角色</th><th>說明</th></tr>
+
+    <tr><td class="mono">sim_load(path)</td>
+        <td><span class="dot d-s"></span>sim</td><td>—</td>
+        <td>載入 XML，初始化模型</td></tr>
+    <tr><td class="mono">sim_unload()</td>
+        <td><span class="dot d-s"></span>sim</td><td>—</td>
+        <td>釋放 MuJoCo 資源</td></tr>
+    <tr><td class="mono">sim_reset()</td>
+        <td><span class="dot d-s"></span>sim</td><td>—</td>
+        <td>回到初始狀態</td></tr>
+    <tr><td class="mono">sim_step()</td>
+        <td><span class="dot d-s"></span>sim</td><td>—</td>
+        <td>推進一個物理步（2 ms）</td></tr>
+    <tr><td class="mono">sim_model() / sim_data()</td>
+        <td><span class="dot d-s"></span>sim</td><td>—</td>
+        <td>取得原始 MuJoCo 指標</td></tr>
+    <tr style="background:#e0f2fe22">
+        <td class="mono">sim_joint_angle_deg(name)</td>
+        <td><span class="dot d-s"></span>sim</td>
+        <td><span class="role role-monitor">State Monitor</span></td>
+        <td>關節角度（°）</td></tr>
+    <tr style="background:#e0f2fe22">
+        <td class="mono">sim_joint_vel_deg(name)</td>
+        <td><span class="dot d-s"></span>sim</td>
+        <td><span class="role role-monitor">State Monitor</span></td>
+        <td>關節角速度（°/s）</td></tr>
+    <tr style="background:#e0f2fe22">
+        <td class="mono">sim_body_pos(name, pos)</td>
+        <td><span class="dot d-s"></span>sim</td>
+        <td><span class="role role-monitor">State Monitor</span></td>
+        <td>Body 世界座標位置</td></tr>
+    <tr style="background:#e0f2fe22">
+        <td class="mono">sim_actuator_force(index)</td>
+        <td><span class="dot d-s"></span>sim</td>
+        <td><span class="role role-monitor">State Monitor</span></td>
+        <td>Actuator 實際輸出力</td></tr>
+
+    <tr><td class="mono">ctrl_init()</td>
+        <td><span class="dot d-c"></span>ctrl</td><td>—</td>
+        <td>初始化（phase=1）</td></tr>
+    <tr style="background:#fef2f222">
+        <td class="mono">ctrl_set_phase(p)</td>
+        <td><span class="dot d-c"></span>ctrl</td>
+        <td><span class="role role-motor">Motor Control</span></td>
+        <td>切換 motor preset 1/2/3</td></tr>
+    <tr><td class="mono">ctrl_get_phase()</td>
+        <td><span class="dot d-c"></span>ctrl</td><td>—</td>
+        <td>讀取目前 phase</td></tr>
+    <tr style="background:#fef2f222">
+        <td class="mono">ctrl_apply()</td>
+        <td><span class="dot d-c"></span>ctrl</td>
+        <td><span class="role role-motor">Motor Control</span></td>
+        <td>將 phase 值寫入 d→ctrl[]</td></tr>
+    <tr style="background:#fef2f222">
+        <td class="mono">ctrl_set_motors(yaw, pitch)</td>
+        <td><span class="dot d-c"></span>ctrl</td>
+        <td><span class="role role-motor">Motor Control</span></td>
+        <td>直接設定 ctrl（手動）</td></tr>
+
+    <tr><td class="mono">viewer_init(w,h,title)</td>
+        <td><span class="dot d-v"></span>viewer</td><td>—</td>
+        <td>建立視窗 + MuJoCo 場景</td></tr>
+    <tr><td class="mono">viewer_free()</td>
+        <td><span class="dot d-v"></span>viewer</td><td>—</td>
+        <td>釋放視窗資源</td></tr>
+    <tr><td class="mono">viewer_should_close()</td>
+        <td><span class="dot d-v"></span>viewer</td><td>—</td>
+        <td>是否應結束</td></tr>
+    <tr><td class="mono">viewer_is_paused()</td>
+        <td><span class="dot d-v"></span>viewer</td><td>—</td>
+        <td>是否暫停中</td></tr>
+    <tr><td class="mono">viewer_render()</td>
+        <td><span class="dot d-v"></span>viewer</td><td>—</td>
+        <td>渲染一幀</td></tr>
+  </table>
+</section>
+
+<!-- ===== SIM ===== -->
+<section id="sim">
+  <h2><span class="mod-badge b-sim">sim</span>sim.h / sim.c</h2>
+  <p>擁有 <code>mjModel*</code> 和 <code>mjData*</code>。所有物理計算、狀態讀取都在此層。其他模組透過 accessor 取得指標，不直接持有。</p>
+
+  <div class="fn-card" id="sim_load">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">sim_load</span>(<span class="pt">const char</span> *path)</span>
+    </div>
+    <div class="fn-body">
+      <p>從 XML 路徑載入 MuJoCo 模型。依序：<code>mj_loadXML</code> → <code>mj_makeData</code> → <code>sim_reset()</code>。</p>
+      <p>成功後印出 body / joint / actuator 數量。載入失敗時 <code>exit(1)</code>。</p>
+      <table><tr><th>參數</th><th>說明</th></tr>
+        <tr><td class="mono">path</td><td>XML 路徑（相對於執行時工作目錄，請從 project root 執行）</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="fn-card" id="sim_unload">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">sim_unload</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>釋放 <code>mjData</code> 與 <code>mjModel</code>，指標清為 NULL。程式結束時呼叫，通常在 <code>viewer_free()</code> 之後。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="sim_reset">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">sim_reset</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>重置為 XML 定義的初始狀態（qpos = 初始值，qvel = 0，time = 0），並執行 forward kinematics。</p>
+      <p>Viewer 的 <kbd>Backspace</kbd> 會呼叫此函數，接著呼叫 <code>ctrl_apply()</code>。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="sim_step">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">sim_step</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>推進一個物理時間步（<code>m→opt.timestep</code>，預設 2 ms）。必須在呼叫前先寫入 <code>d→ctrl[]</code>。</p>
+      <div class="note"><strong>主迴圈頻率：</strong>每渲染幀呼叫約 8 次（1/60 s ÷ 2 ms），以維持實時速度。</div>
+    </div>
+  </div>
+
+  <div class="fn-card" id="sim_accessors">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">mjModel</span>* <span class="fname">sim_model</span>()&nbsp;&nbsp;
+        <span class="ret">mjData</span>*&nbsp;<span class="fname">sim_data</span>()
+      </span>
+    </div>
+    <div class="fn-body">
+      <p>取得全域指標，在 <code>sim_load()</code> 之後才有效。</p>
+      <p><code>mjModel</code>：唯讀的結構描述（幾何、拓撲、物理參數）。<br>
+         <code>mjData</code>：所有動態狀態，含 <code>qpos / qvel / ctrl / xpos / xquat / actuator_force</code> 等。</p>
+      <div class="returns"><strong>Returns：</strong>內部靜態指標，呼叫方不應 free。</div>
+    </div>
+  </div>
+
+  <!-- joint monitor -->
+  <div class="fn-card" id="sim_joint">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">double</span> <span class="fname">sim_joint_angle_deg</span>(<span class="pt">const char</span> *name)<br>
+        <span class="ret">double</span> <span class="fname">sim_joint_vel_deg</span>(<span class="pt">const char</span> *name)
+      </span>
+      <span class="role role-monitor">State Monitor — 角度</span>
+    </div>
+    <div class="fn-body">
+      <p>以名稱查詢關節的當前角度（度）或角速度（度/s）。</p>
+      <table>
+        <tr><th>name</th><th>對應 body</th><th>旋轉軸</th><th>範圍</th></tr>
+        <tr><td class="mono">"yaw_joint"</td><td>top_cylinder</td><td>Z 軸</td><td>±90°</td></tr>
+        <tr><td class="mono">"pitch_joint"</td><td>pitch_cylinder</td><td>X 軸</td><td>±60°</td></tr>
+      </table>
+      <div class="returns"><strong>Returns：</strong>找不到名稱時回傳 0.0。</div>
+    </div>
+  </div>
+
+  <!-- body pos monitor -->
+  <div class="fn-card" id="sim_body_pos">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">int</span> <span class="fname">sim_body_pos</span>(<span class="pt">const char</span> *name,&nbsp;<span class="pt">double</span> pos[3])
+      </span>
+      <span class="role role-monitor">State Monitor — 位置</span>
+    </div>
+    <div class="fn-body">
+      <p>將 <code>name</code> 對應 body 的世界座標（x, y, z，單位 m）填入 <code>pos[3]</code>。</p>
+      <table>
+        <tr><th>Body</th><th>初始位置（世界座標）</th><th>說明</th></tr>
+        <tr><td class="mono">"base_cylinder"</td><td>(0, 0, 0.2)</td><td>固定底座</td></tr>
+        <tr><td class="mono">"top_cylinder"</td><td>(0, 0, 0.5)</td><td>Yaw 關節所在</td></tr>
+        <tr><td class="mono">"pitch_cylinder"</td><td>(0, 0, 0.7)</td><td>Pitch 關節所在</td></tr>
+      </table>
+      <div class="returns"><strong>Returns：</strong>0 成功，−1 找不到 body。</div>
+      <pre style="margin-top:0.5rem">/* 使用範例 */
+double pos[3];
+if (sim_body_pos("pitch_cylinder", pos) == 0)
+    printf("tip: %.3f %.3f %.3f\n", pos[0], pos[1], pos[2]);</pre>
+    </div>
+  </div>
+
+  <!-- actuator force monitor -->
+  <div class="fn-card" id="sim_actuator">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">double</span> <span class="fname">sim_actuator_force</span>(<span class="pt">int</span> index)
+      </span>
+      <span class="role role-monitor">State Monitor — 受力</span>
+    </div>
+    <div class="fn-body">
+      <p>回傳 actuator 實際輸出的力（經過 gear 放大後，單位 N·m）。</p>
+      <table>
+        <tr><th>index</th><th>Actuator</th><th>gear</th><th>說明</th></tr>
+        <tr><td class="mono">0</td><td>yaw_motor</td><td>10</td><td>yaw 關節力矩</td></tr>
+        <tr><td class="mono">1</td><td>pitch_motor</td><td>10</td><td>pitch 關節力矩</td></tr>
+      </table>
+      <div class="note">
+        <strong>注意：</strong>值來自 <code>d→actuator_force[index]</code>，是 MuJoCo 計算的實際輸出力，
+        受 joint limit 影響時可能與 ctrl 值不成正比。靜止時因 damping 接近 0。
+      </div>
+      <div class="returns"><strong>Returns：</strong>index 超出範圍時回傳 0.0。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTROLLER ===== -->
+<section id="controller">
+  <h2><span class="mod-badge b-ctrl">controller</span>controller.h / controller.c</h2>
+  <p>管理 motor 的 phase 狀態，並將預設的控制值寫入 <code>d→ctrl[]</code>。這層是主要的<strong>馬達操控入口</strong>。</p>
+
+  <h3>Phase Preset 對照</h3>
+  <table>
+    <tr><th>Phase</th><th>yaw_motor ctrl[0]</th><th>pitch_motor ctrl[1]</th><th>效果</th></tr>
+    <tr><td>1</td><td>+1.0</td><td>0.0</td><td>Yaw 正向旋轉至 +90° 限制</td></tr>
+    <tr><td>2</td><td>0.0</td><td>+0.5</td><td>Pitch 正向旋轉至 +60° 限制</td></tr>
+    <tr><td>3</td><td>−0.8</td><td>−0.3</td><td>兩者反向旋轉</td></tr>
+  </table>
+
+  <div class="fn-card" id="ctrl_init">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">ctrl_init</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>初始化控制器：設 phase = 1，立即呼叫 <code>ctrl_apply()</code>。在 <code>sim_load()</code> 之後、主迴圈之前呼叫。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="ctrl_phase">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">void</span> <span class="fname">ctrl_set_phase</span>(<span class="pt">int</span> phase)&nbsp;&nbsp;
+        <span class="ret">int</span>&nbsp;<span class="fname">ctrl_get_phase</span>()
+      </span>
+      <span class="role role-motor">Motor Control</span>
+    </div>
+    <div class="fn-body">
+      <p><code>ctrl_set_phase</code>：切換 preset（1–3），超出範圍忽略。<strong>不立即</strong>更新 <code>d→ctrl[]</code>，改變在下一次 <code>ctrl_apply()</code> 時生效。</p>
+      <p><code>ctrl_get_phase</code>：回傳目前 phase 號碼（HUD 顯示用）。</p>
+      <p>Viewer 的 <kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> 鍵直接呼叫 <code>ctrl_set_phase</code>。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="ctrl_apply">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">ctrl_apply</span>()</span>
+      <span class="role role-motor">Motor Control</span>
+    </div>
+    <div class="fn-body">
+      <p>根據目前 phase 將控制值寫入 <code>sim_data()→ctrl[0]</code>（yaw）和 <code>ctrl[1]</code>（pitch）。</p>
+      <p>在主迴圈中每次 <code>sim_step()</code> <strong>之前</strong>呼叫：</p>
+      <pre>while (sim_data()->time - start &lt; SIM_PER_FRAME) {
+    ctrl_apply();   /* ← 寫入 ctrl[] */
+    sim_step();     /* mj_step 讀取 ctrl[] 並積分 */
+}</pre>
+    </div>
+  </div>
+
+  <div class="fn-card" id="ctrl_set_motors">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">void</span> <span class="fname">ctrl_set_motors</span>(<span class="pt">double</span> yaw,&nbsp;<span class="pt">double</span> pitch)
+      </span>
+      <span class="role role-motor">Motor Control</span>
+    </div>
+    <div class="fn-body">
+      <p>直接將任意值寫入 <code>d→ctrl[0]</code>（yaw）和 <code>d→ctrl[1]</code>（pitch），不透過 phase 邏輯。</p>
+      <table><tr><th>參數</th><th>說明</th></tr>
+        <tr><td class="mono">yaw</td><td>yaw_motor 控制輸入（gear=10，輸出力矩 = yaw × 10 N·m）</td></tr>
+        <tr><td class="mono">pitch</td><td>pitch_motor 控制輸入</td></tr>
+      </table>
+      <div class="note">
+        <strong>注意：</strong>若主迴圈持續呼叫 <code>ctrl_apply()</code>，每幀都會用 phase 值覆蓋此處的設定。
+        手動控制時，在主迴圈中以 <code>ctrl_set_motors()</code> 取代 <code>ctrl_apply()</code>。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIEWER ===== -->
+<section id="viewer">
+  <h2><span class="mod-badge b-viewer">viewer</span>viewer.h / viewer.c</h2>
+  <p>封裝 GLFW 視窗、OpenGL context、MuJoCo 視覺化（<code>mjvCamera</code>、<code>mjvScene</code>、<code>mjrContext</code>），及所有輸入 callback 與 HUD 文字渲染。</p>
+
+  <h3>鍵盤快捷鍵</h3>
+  <table>
+    <tr><th>按鍵</th><th>動作</th><th>呼叫的函數</th></tr>
+    <tr><td><kbd>Esc</kbd></td><td>關閉視窗</td><td>glfwSetWindowShouldClose</td></tr>
+    <tr><td><kbd>Space</kbd></td><td>暫停 / 繼續</td><td>paused ^= 1</td></tr>
+    <tr><td><kbd>Backspace</kbd></td><td>重置模擬</td><td>sim_reset() + ctrl_apply()</td></tr>
+    <tr><td><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></td><td>切換 motor phase</td><td>ctrl_set_phase()</td></tr>
+  </table>
+
+  <h3>滑鼠控制</h3>
+  <table>
+    <tr><th>操作</th><th>動作</th></tr>
+    <tr><td>左鍵拖曳</td><td>旋轉視角</td></tr>
+    <tr><td>右鍵拖曳</td><td>垂直平移</td></tr>
+    <tr><td>Shift + 右鍵拖曳</td><td>水平平移</td></tr>
+    <tr><td>中鍵 / 滾輪</td><td>縮放</td></tr>
+  </table>
+
+  <div class="fn-card" id="viewer_init">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">int</span> <span class="fname">viewer_init</span>(<span class="pt">int</span> width,&nbsp;<span class="pt">int</span> height,&nbsp;<span class="pt">const char</span> *title)
+      </span>
+    </div>
+    <div class="fn-body">
+      <p>建立 GLFW 視窗並完成視覺化初始化：</p>
+      <ol>
+        <li><code>glfwInit()</code> + <code>glfwCreateWindow()</code></li>
+        <li>啟用 vsync（<code>glfwSwapInterval(1)</code> → ~60 fps）</li>
+        <li>註冊 keyboard / mouse button / mouse move / scroll callback</li>
+        <li><code>mjv_makeScene</code> + <code>mjr_makeContext</code>（需要 OpenGL context，<code>glfwMakeContextCurrent</code> 後才可呼叫）</li>
+        <li>設定初始相機：lookat (0, 0, 0.4)、distance 2 m、azimuth 135°、elevation −20°</li>
+      </ol>
+      <div class="note"><strong>前置條件：</strong>必須在 <code>sim_load()</code> 之後呼叫（需要 <code>sim_model()</code>）。</div>
+      <div class="returns"><strong>Returns：</strong>1 成功，0 失敗。</div>
+    </div>
+  </div>
+
+  <div class="fn-card" id="viewer_free">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">viewer_free</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>釋放順序：<code>mjr_freeContext</code> → <code>mjv_freeScene</code> → <code>glfwDestroyWindow</code> → <code>glfwTerminate</code>。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="viewer_query">
+    <div class="fn-head">
+      <span class="fn-sig">
+        <span class="ret">int</span> <span class="fname">viewer_should_close</span>()&nbsp;&nbsp;
+        <span class="ret">int</span>&nbsp;<span class="fname">viewer_is_paused</span>()
+      </span>
+    </div>
+    <div class="fn-body">
+      <p><code>viewer_should_close</code>：<kbd>Esc</kbd> 或點擊 ✕ 後為 1，主迴圈的終止條件。</p>
+      <p><code>viewer_is_paused</code>：為 1 時主迴圈跳過 sim step，畫面凍結但仍可旋轉視角。</p>
+    </div>
+  </div>
+
+  <div class="fn-card" id="viewer_render">
+    <div class="fn-head">
+      <span class="fn-sig"><span class="ret">void</span> <span class="fname">viewer_render</span>()</span>
+    </div>
+    <div class="fn-body">
+      <p>一幀的完整渲染流程：</p>
+      <ol>
+        <li><code>glfwGetFramebufferSize</code>：取得實際 pixel 大小（HiDPI 適配）</li>
+        <li><code>mjv_updateScene</code>：從 model / data 計算場景幾何</li>
+        <li><code>mjr_render</code>：OpenGL 繪製</li>
+        <li><code>mjr_overlay</code>：左上角疊加 HUD（時間、關節角度、ctrl、快捷鍵）</li>
+        <li><code>glfwSwapBuffers</code>：顯示（vsync 在此阻塞，約 16 ms）</li>
+        <li><code>glfwPollEvents</code>：觸發所有 input callback</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN LOOP ===== -->
+<section id="main-loop">
+  <h2><span class="mod-badge b-main">main</span>主迴圈模式</h2>
+  <p><code>main.c</code> 不持有任何狀態，只負責串接與時序控制。</p>
+  <pre>sim_load(MODEL_PATH);
+ctrl_init();
+viewer_init(1200, 900, "MuJoCo - Three Cylinders");
+
+while (!viewer_should_close()) {
+    if (!viewer_is_paused()) {
+        mjtNum start = sim_data()->time;
+        while (sim_data()->time - start &lt; SIM_PER_FRAME) {
+            ctrl_apply();   /* [Motor Control] 寫入 ctrl[] */
+            sim_step();     /* 推進 2 ms */
+        }                   /* ≈ 8 次 / 幀，維持實時速度 */
+    }
+    viewer_render();        /* 渲染 + vsync */
+}
+
+viewer_free();
+sim_unload();</pre>
+
+  <h3>擴充：手動控制 motor</h3>
+  <p>以 <code>ctrl_set_motors()</code> 取代 <code>ctrl_apply()</code>，傳入任意值：</p>
+  <pre>/* 正弦波控制範例 */
+double t = sim_data()->time;
+ctrl_set_motors(sin(t * 2.0), cos(t * 1.5) * 0.5);
+sim_step();</pre>
+
+  <h3>擴充：讀取完整狀態</h3>
+  <pre>/* 角度與角速度 */
+double yaw   = sim_joint_angle_deg("yaw_joint");
+double yaw_v = sim_joint_vel_deg("yaw_joint");
+
+/* body 世界座標 */
+double pos[3];
+sim_body_pos("pitch_cylinder", pos);   /* pos = {x, y, z} */
+
+/* actuator 實際輸出力 */
+double f_yaw   = sim_actuator_force(0);  /* yaw_motor */
+double f_pitch = sim_actuator_force(1);  /* pitch_motor */</pre>
+</section>
+
+</main>
+</div>
+</body>
+</html>

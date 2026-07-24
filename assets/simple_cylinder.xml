@@ -1,0 +1,17 @@
+<mujoco model="simple_cylinder">
+  <!-- 視覺與環境設定 -->
+  <statistic center="0 0 0.5"/>
+  <worldbody>
+    <!-- 地板 -->
+    <geom name="floor" size="1 1 .05" type="plane" rgba="0.8 0.8 0.8 1"/>
+    <!-- 光源 -->
+    <light pos="0 0 3"/>
+
+    <!-- 圓柱體 Body -->
+    <!-- pos="0 0 0.2" 代表中心點在 Z=0.2 高度 -->
+    <body name="cylinder_body" pos="0 0 0.2">
+      <!-- size="0.1 0.2" 表示：半徑 0.1m，半高 0.2m（總高度 0.4m） -->
+      <geom name="my_cylinder" type="cylinder" size="0.1 0.2" rgba="0.2 0.6 0.8 1"/>
+    </body>
+  </worldbody>
+</mujoco>
