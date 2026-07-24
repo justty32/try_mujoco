@@ -1,0 +1,24 @@
+# 預設：文字檔在 repo 存 LF，checkout 時依平台轉換
+* text=auto eol=lf
+
+# 明確指定為文字的類型
+*.c      text eol=lf
+*.h      text eol=lf
+*.cmake  text eol=lf
+*.md     text eol=lf
+*.html   text eol=lf
+*.xml    text eol=lf
+*.txt    text eol=lf
+*.sh     text eol=lf
+
+# Windows 批次檔維持 CRLF
+*.bat    text eol=crlf
+
+# 二進位檔，不做任何轉換
+*.exe    binary
+*.dll    binary
+*.lib    binary
+*.a      binary
+*.o      binary
+*.png    binary
+*.jpg    binary
