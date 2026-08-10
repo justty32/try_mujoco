@@ -3,6 +3,13 @@
 
 static int phase = 1;
 
+/* ctrl[0..5] = yaw1, pitch1, yaw2, pitch2, yaw3, pitch3 */
+static const double PHASES[3][6] = {
+    {  1.0,  0.0,  1.0,  0.0,  1.0,  0.0 },  /* 1: all yaw          */
+    {  0.0,  0.5,  0.0,  0.5,  0.0,  0.5 },  /* 2: all pitch        */
+    { -0.8, -0.3, -0.8, -0.3, -0.8, -0.3 },  /* 3: all reverse      */
+};
+
 void ctrl_init(void) {
     phase = 1;
     ctrl_apply();
@@ -18,15 +25,11 @@ int ctrl_get_phase(void) {
 
 void ctrl_apply(void) {
     mjData *d = sim_data();
-    switch (phase) {
-    case 1: d->ctrl[0] =  1.0;  d->ctrl[1] =  0.0;  break;
-    case 2: d->ctrl[0] =  0.0;  d->ctrl[1] =  0.5;  break;
-    case 3: d->ctrl[0] = -0.8;  d->ctrl[1] = -0.3;  break;
-    }
+    const double *p = PHASES[phase - 1];
+    for (int i = 0; i < 6; i++) d->ctrl[i] = p[i];
 }
 
-void ctrl_set_motors(double yaw, double pitch) {
+void ctrl_set_motors(const double ctrl[6]) {
     mjData *d = sim_data();
-    d->ctrl[0] = yaw;
-    d->ctrl[1] = pitch;
+    for (int i = 0; i < 6; i++) d->ctrl[i] = ctrl[i];
 }

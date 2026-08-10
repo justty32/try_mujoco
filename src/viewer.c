@@ -73,18 +73,23 @@ static void build_overlay(char *buf, int bufsz) {
     mjData *d = sim_data();
     snprintf(buf, bufsz,
         "Time: %.2f s%s\n"
-        "Yaw joint:   %+7.2f deg  vel %+.2f deg/s\n"
-        "Pitch joint: %+7.2f deg  vel %+.2f deg/s\n"
-        "yaw_motor:   ctrl = %+.2f\n"
-        "pitch_motor: ctrl = %+.2f\n"
+        "yaw1:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "pitch1: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "yaw2:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "pitch2: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "yaw3:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "pitch3: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
         "\n"
-        "[1] yaw  [2] pitch  [3] both\n"
+        "[1] all-yaw  [2] all-pitch  [3] reverse\n"
         "[Space] %-6s  [Bksp] reset  [Esc] quit\n"
         "Drag: left=rotate  right=pan  scroll=zoom",
         d->time, paused ? "  PAUSED" : "",
-        sim_joint_angle_deg("yaw_joint"),   sim_joint_vel_deg("yaw_joint"),
-        sim_joint_angle_deg("pitch_joint"), sim_joint_vel_deg("pitch_joint"),
-        d->ctrl[0], d->ctrl[1],
+        sim_joint_angle_deg("yaw1"),   sim_joint_vel_deg("yaw1"),   d->ctrl[0],
+        sim_joint_angle_deg("pitch1"), sim_joint_vel_deg("pitch1"), d->ctrl[1],
+        sim_joint_angle_deg("yaw2"),   sim_joint_vel_deg("yaw2"),   d->ctrl[2],
+        sim_joint_angle_deg("pitch2"), sim_joint_vel_deg("pitch2"), d->ctrl[3],
+        sim_joint_angle_deg("yaw3"),   sim_joint_vel_deg("yaw3"),   d->ctrl[4],
+        sim_joint_angle_deg("pitch3"), sim_joint_vel_deg("pitch3"), d->ctrl[5],
         paused ? "resume" : "pause"
     );
 }
@@ -143,7 +148,7 @@ void viewer_render(void) {
     mjv_updateScene(sim_model(), sim_data(), &opt, NULL, &cam, mjCAT_ALL, &scn);
     mjr_render(vp, &scn, &con);
 
-    char overlay[512];
+    char overlay[1024];
     build_overlay(overlay, sizeof(overlay));
     mjr_overlay(mjFONT_NORMAL, mjGRID_TOPLEFT, vp, overlay, NULL, &con);
 

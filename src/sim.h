@@ -27,7 +27,7 @@ mjData  *sim_data(void);
 /* ---- [STATE MONITOR] joint ---- */
 
 /** Current angle of a hinge joint, in degrees. Returns 0.0 if not found.
- *  Available joints: "yaw_joint" (±90°), "pitch_joint" (±60°) */
+ *  Joints: "yaw1" "pitch1" "yaw2" "pitch2" "yaw3" "pitch3" */
 double   sim_joint_angle_deg(const char *name);
 
 /** Current angular velocity of a hinge joint, in degrees/s. */
@@ -37,12 +37,12 @@ double   sim_joint_vel_deg(const char *name);
 
 /** Fill pos[3] with the world-frame Cartesian position of a body (x, y, z).
  *  Returns 0 on success, -1 if body name not found.
- *  Available bodies: "base_cylinder", "top_cylinder", "pitch_cylinder" */
+ *  Bodies: "base_cylinder" "disc1" "arm1" "disc2" "arm2" "disc3" "arm3" */
 int      sim_body_pos(const char *name, double pos[3]);
 
 /* ---- [STATE MONITOR] actuator force ---- */
 
 /** Force currently output by an actuator (after gear ratio).
- *  index: 0 = yaw_motor, 1 = pitch_motor.
+ *  index: 0=yaw1 1=pitch1 2=yaw2 3=pitch2 4=yaw3 5=pitch3
  *  Returns 0.0 if index is out of range. */
 double   sim_actuator_force(int index);

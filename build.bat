@@ -6,6 +6,7 @@ set PATH=C:\dev\mingw64\bin;%PATH%
 
 cmake -G "MinGW Makefiles" ^
     -DCMAKE_C_COMPILER=C:\dev\mingw64\bin\gcc.exe ^
+    -DCMAKE_BUILD_TYPE=Release ^
     -B build -S . ^
     && cmake --build build --config Release
 

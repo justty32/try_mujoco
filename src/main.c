@@ -2,13 +2,13 @@
 #include "controller.h"
 #include "viewer.h"
 
-#define MODEL_PATH    "assets/three_cylinders.xml"
+#define MODEL_PATH    "assets/seven_cylinders.xml"
 #define SIM_PER_FRAME (1.0 / 60.0)
 
 int main(void) {
     sim_load(MODEL_PATH);
     ctrl_init();
-    if (!viewer_init(1200, 900, "MuJoCo - Three Cylinders"))
+    if (!viewer_init(1200, 900, "MuJoCo - Seven Cylinders"))
         return 1;
 
     while (!viewer_should_close()) {

@@ -209,7 +209,7 @@ tr:hover td { background: var(--bg); }
 <section id="overview">
   <h1>robot</h1>
   <p style="color:var(--muted); margin-bottom:1.5rem;">
-    MuJoCo C 專案 · three_cylinders.xml · 控制 yaw / pitch motor，監控關節角度、位置與受力
+    MuJoCo C 專案 · seven_cylinders.xml · 控制 6 個 yaw / pitch motor，監控關節角度、位置與受力
   </p>
 
   <h2>架構</h2>
@@ -228,12 +228,16 @@ tr:hover td { background: var(--bg); }
     </p>
   </div>
 
-  <h2>模型結構（three_cylinders.xml）</h2>
+  <h2>模型結構（seven_cylinders.xml）</h2>
   <table>
     <tr><th>Body</th><th>Joint</th><th>Actuator</th><th>範圍</th></tr>
     <tr><td class="mono">base_cylinder</td><td>—（固定在世界）</td><td>—</td><td>—</td></tr>
-    <tr><td class="mono">top_cylinder</td><td class="mono">yaw_joint（繞 Z）</td><td class="mono">yaw_motor [0]</td><td>±90°</td></tr>
-    <tr><td class="mono">pitch_cylinder</td><td class="mono">pitch_joint（繞 X）</td><td class="mono">pitch_motor [1]</td><td>±60°</td></tr>
+    <tr><td class="mono">disc1</td><td class="mono">yaw1（繞 Z）</td><td class="mono">yaw1_motor [0]</td><td>±90°</td></tr>
+    <tr><td class="mono">arm1</td><td class="mono">pitch1（繞 Y）</td><td class="mono">pitch1_motor [1]</td><td>±60°</td></tr>
+    <tr><td class="mono">disc2</td><td class="mono">yaw2（繞 Z）</td><td class="mono">yaw2_motor [2]</td><td>±90°</td></tr>
+    <tr><td class="mono">arm2</td><td class="mono">pitch2（繞 Y）</td><td class="mono">pitch2_motor [3]</td><td>±60°</td></tr>
+    <tr><td class="mono">disc3</td><td class="mono">yaw3（繞 Z）</td><td class="mono">yaw3_motor [4]</td><td>±90°</td></tr>
+    <tr><td class="mono">arm3</td><td class="mono">pitch3（繞 Y）</td><td class="mono">pitch3_motor [5]</td><td>±60°</td></tr>
   </table>
 </section>
 
@@ -296,7 +300,7 @@ tr:hover td { background: var(--bg); }
         <td><span class="role role-motor">Motor Control</span></td>
         <td>將 phase 值寫入 d→ctrl[]</td></tr>
     <tr style="background:#fef2f222">
-        <td class="mono">ctrl_set_motors(yaw, pitch)</td>
+        <td class="mono">ctrl_set_motors(ctrl[6])</td>
         <td><span class="dot d-c"></span>ctrl</td>
         <td><span class="role role-motor">Motor Control</span></td>
         <td>直接設定 ctrl（手動）</td></tr>
@@ -394,8 +398,8 @@ tr:hover td { background: var(--bg); }
       <p>以名稱查詢關節的當前角度（度）或角速度（度/s）。</p>
       <table>
         <tr><th>name</th><th>對應 body</th><th>旋轉軸</th><th>範圍</th></tr>
-        <tr><td class="mono">"yaw_joint"</td><td>top_cylinder</td><td>Z 軸</td><td>±90°</td></tr>
-        <tr><td class="mono">"pitch_joint"</td><td>pitch_cylinder</td><td>X 軸</td><td>±60°</td></tr>
+        <tr><td class="mono">"yaw1" / "yaw2" / "yaw3"</td><td>disc1 / disc2 / disc3</td><td>Z 軸</td><td>±90°</td></tr>
+        <tr><td class="mono">"pitch1" / "pitch2" / "pitch3"</td><td>arm1 / arm2 / arm3</td><td>Y 軸</td><td>±60°</td></tr>
       </table>
       <div class="returns"><strong>Returns：</strong>找不到名稱時回傳 0.0。</div>
     </div>
@@ -413,14 +417,15 @@ tr:hover td { background: var(--bg); }
       <p>將 <code>name</code> 對應 body 的世界座標（x, y, z，單位 m）填入 <code>pos[3]</code>。</p>
       <table>
         <tr><th>Body</th><th>初始位置（世界座標）</th><th>說明</th></tr>
-        <tr><td class="mono">"base_cylinder"</td><td>(0, 0, 0.2)</td><td>固定底座</td></tr>
-        <tr><td class="mono">"top_cylinder"</td><td>(0, 0, 0.5)</td><td>Yaw 關節所在</td></tr>
-        <tr><td class="mono">"pitch_cylinder"</td><td>(0, 0, 0.7)</td><td>Pitch 關節所在</td></tr>
+        <tr><td class="mono">"base_cylinder"</td><td>(0, 0, 0.10)</td><td>固定底座中心</td></tr>
+        <tr><td class="mono">"disc1" / "arm1"</td><td>(0, 0, 0.20) / (0, 0, 0.30)</td><td>第一組 yaw / pitch</td></tr>
+        <tr><td class="mono">"disc2" / "arm2"</td><td>(0.20, 0, 0.30) / (0.20, 0, 0.39)</td><td>第二組 yaw / pitch</td></tr>
+        <tr><td class="mono">"disc3" / "arm3"</td><td>(0.38, 0, 0.39) / (0.38, 0, 0.47)</td><td>第三組 yaw / pitch</td></tr>
       </table>
       <div class="returns"><strong>Returns：</strong>0 成功，−1 找不到 body。</div>
       <pre style="margin-top:0.5rem">/* 使用範例 */
 double pos[3];
-if (sim_body_pos("pitch_cylinder", pos) == 0)
+if (sim_body_pos("arm3", pos) == 0)
     printf("tip: %.3f %.3f %.3f\n", pos[0], pos[1], pos[2]);</pre>
     </div>
   </div>
@@ -437,8 +442,12 @@ if (sim_body_pos("pitch_cylinder", pos) == 0)
       <p>回傳 actuator 實際輸出的力（經過 gear 放大後，單位 N·m）。</p>
       <table>
         <tr><th>index</th><th>Actuator</th><th>gear</th><th>說明</th></tr>
-        <tr><td class="mono">0</td><td>yaw_motor</td><td>10</td><td>yaw 關節力矩</td></tr>
-        <tr><td class="mono">1</td><td>pitch_motor</td><td>10</td><td>pitch 關節力矩</td></tr>
+        <tr><td class="mono">0</td><td>yaw1_motor</td><td>10</td><td>yaw1 關節力矩</td></tr>
+        <tr><td class="mono">1</td><td>pitch1_motor</td><td>10</td><td>pitch1 關節力矩</td></tr>
+        <tr><td class="mono">2</td><td>yaw2_motor</td><td>9</td><td>yaw2 關節力矩</td></tr>
+        <tr><td class="mono">3</td><td>pitch2_motor</td><td>9</td><td>pitch2 關節力矩</td></tr>
+        <tr><td class="mono">4</td><td>yaw3_motor</td><td>8</td><td>yaw3 關節力矩</td></tr>
+        <tr><td class="mono">5</td><td>pitch3_motor</td><td>8</td><td>pitch3 關節力矩</td></tr>
       </table>
       <div class="note">
         <strong>注意：</strong>值來自 <code>d→actuator_force[index]</code>，是 MuJoCo 計算的實際輸出力，
@@ -456,10 +465,10 @@ if (sim_body_pos("pitch_cylinder", pos) == 0)
 
   <h3>Phase Preset 對照</h3>
   <table>
-    <tr><th>Phase</th><th>yaw_motor ctrl[0]</th><th>pitch_motor ctrl[1]</th><th>效果</th></tr>
-    <tr><td>1</td><td>+1.0</td><td>0.0</td><td>Yaw 正向旋轉至 +90° 限制</td></tr>
-    <tr><td>2</td><td>0.0</td><td>+0.5</td><td>Pitch 正向旋轉至 +60° 限制</td></tr>
-    <tr><td>3</td><td>−0.8</td><td>−0.3</td><td>兩者反向旋轉</td></tr>
+    <tr><th>Phase</th><th>yaw1 / yaw2 / yaw3</th><th>pitch1 / pitch2 / pitch3</th><th>效果</th></tr>
+    <tr><td>1</td><td>+1.0</td><td>0.0</td><td>三個 Yaw 正向</td></tr>
+    <tr><td>2</td><td>0.0</td><td>+0.5</td><td>三個 Pitch 正向</td></tr>
+    <tr><td>3</td><td>−0.8</td><td>−0.3</td><td>六個關節反向</td></tr>
   </table>
 
   <div class="fn-card" id="ctrl_init">
@@ -492,7 +501,7 @@ if (sim_body_pos("pitch_cylinder", pos) == 0)
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p>根據目前 phase 將控制值寫入 <code>sim_data()→ctrl[0]</code>（yaw）和 <code>ctrl[1]</code>（pitch）。</p>
+      <p>根據目前 phase 將控制值寫入 <code>sim_data()→ctrl[0..5]</code>（三組 yaw / pitch）。</p>
       <p>在主迴圈中每次 <code>sim_step()</code> <strong>之前</strong>呼叫：</p>
       <pre>while (sim_data()->time - start &lt; SIM_PER_FRAME) {
     ctrl_apply();   /* ← 寫入 ctrl[] */
@@ -504,15 +513,14 @@ if (sim_body_pos("pitch_cylinder", pos) == 0)
   <div class="fn-card" id="ctrl_set_motors">
     <div class="fn-head">
       <span class="fn-sig">
-        <span class="ret">void</span> <span class="fname">ctrl_set_motors</span>(<span class="pt">double</span> yaw,&nbsp;<span class="pt">double</span> pitch)
+        <span class="ret">void</span> <span class="fname">ctrl_set_motors</span>(<span class="pt">const double</span> ctrl[6])
       </span>
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p>直接將任意值寫入 <code>d→ctrl[0]</code>（yaw）和 <code>d→ctrl[1]</code>（pitch），不透過 phase 邏輯。</p>
+      <p>直接將六個值寫入 <code>d→ctrl[0..5]</code>，順序為 yaw1、pitch1、yaw2、pitch2、yaw3、pitch3，不透過 phase 邏輯。</p>
       <table><tr><th>參數</th><th>說明</th></tr>
-        <tr><td class="mono">yaw</td><td>yaw_motor 控制輸入（gear=10，輸出力矩 = yaw × 10 N·m）</td></tr>
-        <tr><td class="mono">pitch</td><td>pitch_motor 控制輸入</td></tr>
+        <tr><td class="mono">ctrl[6]</td><td>六個 motor 的控制輸入；模型會把每個值限制在 [−1, +1]</td></tr>
       </table>
       <div class="note">
         <strong>注意：</strong>若主迴圈持續呼叫 <code>ctrl_apply()</code>，每幀都會用 phase 值覆蓋此處的設定。
@@ -611,7 +619,7 @@ if (sim_body_pos("pitch_cylinder", pos) == 0)
   <p><code>main.c</code> 不持有任何狀態，只負責串接與時序控制。</p>
   <pre>sim_load(MODEL_PATH);
 ctrl_init();
-viewer_init(1200, 900, "MuJoCo - Three Cylinders");
+viewer_init(1200, 900, "MuJoCo - Seven Cylinders");
 
 while (!viewer_should_close()) {
     if (!viewer_is_paused()) {
@@ -631,21 +639,22 @@ sim_unload();</pre>
   <p>以 <code>ctrl_set_motors()</code> 取代 <code>ctrl_apply()</code>，傳入任意值：</p>
   <pre>/* 正弦波控制範例 */
 double t = sim_data()->time;
-ctrl_set_motors(sin(t * 2.0), cos(t * 1.5) * 0.5);
+double action[6] = {sin(t * 2.0), cos(t * 1.5) * 0.5, 0, 0, 0, 0};
+ctrl_set_motors(action);
 sim_step();</pre>
 
   <h3>擴充：讀取完整狀態</h3>
   <pre>/* 角度與角速度 */
-double yaw   = sim_joint_angle_deg("yaw_joint");
-double yaw_v = sim_joint_vel_deg("yaw_joint");
+double yaw   = sim_joint_angle_deg("yaw1");
+double yaw_v = sim_joint_vel_deg("yaw1");
 
 /* body 世界座標 */
 double pos[3];
-sim_body_pos("pitch_cylinder", pos);   /* pos = {x, y, z} */
+sim_body_pos("arm3", pos);   /* pos = {x, y, z} */
 
 /* actuator 實際輸出力 */
-double f_yaw   = sim_actuator_force(0);  /* yaw_motor */
-double f_pitch = sim_actuator_force(1);  /* pitch_motor */</pre>
+double f_yaw   = sim_actuator_force(0);  /* yaw1_motor */
+double f_pitch = sim_actuator_force(1);  /* pitch1_motor */</pre>
 </section>
 
 </main>

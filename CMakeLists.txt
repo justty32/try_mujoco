@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 project(robot C)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(MUJOCO_DIR "C:/dev/mujoco")
+set(MUJOCO_DIR "C:/dev/mujoco" CACHE PATH "MuJoCo installation directory")
 
 # Fetch and build GLFW from source (statically, same as MuJoCo's own samples)
 include(FetchContent)
@@ -25,14 +26,24 @@ add_executable(robot
     src/viewer.c
 )
 
+add_executable(seven_cylinders_test
+    tests/seven_cylinders_test.c
+)
+
 target_include_directories(robot PRIVATE
     src
+    "${MUJOCO_DIR}/include"
+)
+target_include_directories(seven_cylinders_test PRIVATE
     "${MUJOCO_DIR}/include"
 )
 target_link_libraries(robot PRIVATE
     "${MUJOCO_DIR}/lib/mujoco.lib"
     glfw
     opengl32
+)
+target_link_libraries(seven_cylinders_test PRIVATE
+    "${MUJOCO_DIR}/lib/mujoco.lib"
 )
 
 # Copy mujoco.dll next to the executable after build
@@ -41,4 +52,17 @@ add_custom_command(TARGET robot POST_BUILD
         "${MUJOCO_DIR}/bin/mujoco.dll"
         "$<TARGET_FILE_DIR:robot>/mujoco.dll"
     COMMENT "Copying mujoco.dll"
+)
+
+add_custom_command(TARGET seven_cylinders_test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${MUJOCO_DIR}/bin/mujoco.dll"
+        "$<TARGET_FILE_DIR:seven_cylinders_test>/mujoco.dll"
+    COMMENT "Copying mujoco.dll for model test"
+)
+
+enable_testing()
+add_test(
+    NAME seven_cylinders_model
+    COMMAND seven_cylinders_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
 )
