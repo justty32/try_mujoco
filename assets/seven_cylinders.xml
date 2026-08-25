@@ -28,9 +28,9 @@
         <geom name="disc1_geom" type="cylinder" pos="0 0 0.05"
               size="0.12 0.05" rgba="0.9 0.4 0.3 1"/>
 
-        <!-- Seg 3: pitch1 水平臂，沿 +X 延伸 0.20，繞 Y 軸抬升。 -->
+        <!-- Seg 3: pitch1 水平臂，沿 +X 延伸 0.20；正角度繞 -Y 軸抬升。 -->
         <body name="arm1" pos="0 0 0.10">
-          <joint name="pitch1" type="hinge" axis="0 1 0" range="-60 60" limited="true"/>
+          <joint name="pitch1" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
           <geom name="arm1_geom" type="cylinder" pos="0.10 0 0"
                 size="0.05 0.10" euler="0 90 0" rgba="0.3 0.8 0.4 1"/>
 
@@ -40,9 +40,9 @@
             <geom name="disc2_geom" type="cylinder" pos="0 0 0.045"
                   size="0.10 0.045" rgba="0.9 0.55 0.25 1"/>
 
-            <!-- Seg 5: pitch2 水平臂，沿 +X 延伸 0.18。 -->
+            <!-- Seg 5: pitch2 水平臂，沿 +X 延伸 0.18；正角度抬升。 -->
             <body name="arm2" pos="0 0 0.09">
-              <joint name="pitch2" type="hinge" axis="0 1 0" range="-60 60" limited="true"/>
+              <joint name="pitch2" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
               <geom name="arm2_geom" type="cylinder" pos="0.09 0 0"
                     size="0.045 0.09" euler="0 90 0" rgba="0.4 0.85 0.35 1"/>
 
@@ -52,9 +52,9 @@
                 <geom name="disc3_geom" type="cylinder" pos="0 0 0.04"
                       size="0.08 0.04" rgba="0.9 0.7 0.2 1"/>
 
-                <!-- Seg 7: pitch3 水平臂，沿 +X 延伸 0.16。 -->
+                <!-- Seg 7: pitch3 水平臂，沿 +X 延伸 0.16；正角度抬升。 -->
                 <body name="arm3" pos="0 0 0.08">
-                  <joint name="pitch3" type="hinge" axis="0 1 0" range="-60 60" limited="true"/>
+                  <joint name="pitch3" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
                   <geom name="arm3_geom" type="cylinder" pos="0.08 0 0"
                         size="0.04 0.08" euler="0 90 0" rgba="0.3 0.8 0.45 1"/>
                   <site name="end_effector" pos="0.16 0 0" size="0.015" rgba="1 0.1 0.1 1"/>
@@ -76,4 +76,3 @@
     <motor name="pitch3_motor" joint="pitch3" gear="8"/>
   </actuator>
 </mujoco>
-

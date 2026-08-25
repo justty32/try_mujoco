@@ -68,8 +68,8 @@ int main(int argc, char **argv) {
         "yaw1", "pitch1", "yaw2", "pitch2", "yaw3", "pitch3"
     };
     static const double AXES[][3] = {
-        {0, 0, 1}, {0, 1, 0}, {0, 0, 1},
-        {0, 1, 0}, {0, 0, 1}, {0, 1, 0}
+        {0, 0, 1}, {0, -1, 0}, {0, 0, 1},
+        {0, -1, 0}, {0, 0, 1}, {0, -1, 0}
     };
     for (int i = 0; i < ARRAY_LEN(JOINTS); ++i) {
         int id = mj_name2id(model, mjOBJ_JOINT, JOINTS[i]);
@@ -147,6 +147,27 @@ int main(int argc, char **argv) {
     } else {
         ok &= check_vec3("site position", "end_effector", data->site_xpos + 3 * site_id,
                          expected_site, 1e-9);
+
+        const double positive_angle = 10.0 * 3.14159265358979323846 / 180.0;
+        for (int i = 0; i < ARRAY_LEN(JOINTS); ++i) {
+            mj_resetData(model, data);
+            int joint_id = mj_name2id(model, mjOBJ_JOINT, JOINTS[i]);
+            if (joint_id < 0) continue;
+            data->qpos[model->jnt_qposadr[joint_id]] = positive_angle;
+            mj_forward(model, data);
+
+            if (i % 2 == 0 && data->site_xpos[3 * site_id + 1] <= 0.0) {
+                fprintf(stderr, "%s positive angle does not move end effector toward +Y\n",
+                        JOINTS[i]);
+                ok = 0;
+            }
+            if (i % 2 == 1 && data->site_xpos[3 * site_id + 2] <= expected_site[2]) {
+                fprintf(stderr, "%s positive angle does not raise end effector\n", JOINTS[i]);
+                ok = 0;
+            }
+        }
+        mj_resetData(model, data);
+        mj_forward(model, data);
     }
 
     for (int i = 0; i < model->nu; ++i) {

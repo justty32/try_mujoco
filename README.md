@@ -73,7 +73,7 @@ robot/
 | 按鍵 | 動作 |
 |------|------|
 | `1` | 三個 yaw motor 正向 |
-| `2` | 三個 pitch motor 正向 |
+| `2` | 三個 pitch motor 正向（抬升） |
 | `3` | 六個 motor 反向 |
 | `Space` | 暫停 / 繼續 |
 | `Backspace` | 重置模擬 |
