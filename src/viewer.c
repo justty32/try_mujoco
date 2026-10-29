@@ -17,17 +17,43 @@ static int    btn_mid   = 0;
 static int    btn_right = 0;
 static double lastx     = 0;
 static double lasty     = 0;
+static int    selected_joint = 0;
 
 /* ------------------------------------------------------------------ */
 /* Input callbacks                                                      */
 /* ------------------------------------------------------------------ */
 
 static void cb_key(GLFWwindow *w, int key, int scan, int act, int mods) {
+    (void)scan;
+    if (act != GLFW_PRESS && act != GLFW_REPEAT) return;
+
+    /* Repeating arrows make small angle adjustments practical. */
+    if (key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) {
+        int direction = key == GLFW_KEY_UP ? -1 : 1;
+        selected_joint = (selected_joint + direction + CTRL_JOINT_COUNT)
+                         % CTRL_JOINT_COUNT;
+        return;
+    }
+    if (key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) {
+        if (ctrl_get_mode() != CTRL_MODE_POSE) ctrl_hold_current();
+        double step = (mods & GLFW_MOD_SHIFT) ? 1.0 : 5.0;
+        if (key == GLFW_KEY_LEFT) step = -step;
+        ctrl_set_target_deg(selected_joint,
+                            ctrl_get_target_deg(selected_joint) + step);
+        return;
+    }
     if (act != GLFW_PRESS) return;
+    if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F6) {
+        selected_joint = key - GLFW_KEY_F1;
+        return;
+    }
     switch (key) {
     case GLFW_KEY_ESCAPE:    glfwSetWindowShouldClose(w, GLFW_TRUE); break;
     case GLFW_KEY_SPACE:     paused ^= 1;                            break;
-    case GLFW_KEY_BACKSPACE: sim_reset(); ctrl_apply();              break;
+    case GLFW_KEY_BACKSPACE:
+        sim_reset(); ctrl_zero_targets(); ctrl_apply();             break;
+    case GLFW_KEY_P:         ctrl_hold_current();                   break;
+    case GLFW_KEY_HOME:      ctrl_zero_targets();                   break;
     case GLFW_KEY_1:         ctrl_set_phase(1);                      break;
     case GLFW_KEY_2:         ctrl_set_phase(2);                      break;
     case GLFW_KEY_3:         ctrl_set_phase(3);                      break;
@@ -71,25 +97,38 @@ static void cb_scroll(GLFWwindow *w, double xoff, double yoff) {
 
 static void build_overlay(char *buf, int bufsz) {
     mjData *d = sim_data();
+    int pose = ctrl_get_mode() == CTRL_MODE_POSE;
+    char rows[1024] = "";
+    int used = 0;
+    for (int i = 0; i < CTRL_JOINT_COUNT; ++i) {
+        const char *name = ctrl_joint_name(i);
+        int count = snprintf(rows + used, sizeof(rows) - (size_t)used,
+            "%c F%d %-6s target %+6.1f  actual %+6.1f deg"
+            "  vel %+6.1f  ctrl %+.2f\n",
+            i == selected_joint ? '>' : ' ', i + 1, name,
+            ctrl_get_target_deg(i), sim_joint_angle_deg(name),
+            sim_joint_vel_deg(name), d->ctrl[i]);
+        if (count < 0 || (size_t)count >= sizeof(rows) - (size_t)used) break;
+        used += count;
+    }
     snprintf(buf, bufsz,
-        "Time: %.2f s%s\n"
-        "yaw1:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
-        "pitch1: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
-        "yaw2:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
-        "pitch2: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
-        "yaw3:   %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
-        "pitch3: %+7.2f deg  vel %+6.1f deg/s  ctrl %+.2f\n"
+        "Time: %.2f s%s | %s\n"
+        "%s\n"
+        "%s"
+        "Selected: %s  target range [%+.0f, %+.0f] deg\n"
         "\n"
-        "[1] all-yaw  [2] all-pitch  [3] reverse\n"
+        "[F1-F6 / Up Down] select joint\n"
+        "[Left Right] target -/+5 deg  [Shift] -/+1 deg\n"
+        "[P] hold current pose  [Home] zero targets\n"
+        "[1] force yaw  [2] force pitch  [3] force reverse\n"
         "[Space] %-6s  [Bksp] reset  [Esc] quit\n"
         "Drag: left=rotate  right=pan  scroll=zoom",
         d->time, paused ? "  PAUSED" : "",
-        sim_joint_angle_deg("yaw1"),   sim_joint_vel_deg("yaw1"),   d->ctrl[0],
-        sim_joint_angle_deg("pitch1"), sim_joint_vel_deg("pitch1"), d->ctrl[1],
-        sim_joint_angle_deg("yaw2"),   sim_joint_vel_deg("yaw2"),   d->ctrl[2],
-        sim_joint_angle_deg("pitch2"), sim_joint_vel_deg("pitch2"), d->ctrl[3],
-        sim_joint_angle_deg("yaw3"),   sim_joint_vel_deg("yaw3"),   d->ctrl[4],
-        sim_joint_angle_deg("pitch3"), sim_joint_vel_deg("pitch3"), d->ctrl[5],
+        pose ? "POSE HOLD" : "FORCE PRESET (targets inactive)",
+        pose ? "Target ramp: 30 deg/s | pitch1 torque limit: +/-40 Nm"
+             : "Original motor limits | press P to hold current pose",
+        rows, ctrl_joint_name(selected_joint),
+        ctrl_get_min_deg(selected_joint), ctrl_get_max_deg(selected_joint),
         paused ? "resume" : "pause"
     );
 }
@@ -148,7 +187,7 @@ void viewer_render(void) {
     mjv_updateScene(sim_model(), sim_data(), &opt, NULL, &cam, mjCAT_ALL, &scn);
     mjr_render(vp, &scn, &con);
 
-    char overlay[1024];
+    char overlay[2048];
     build_overlay(overlay, sizeof(overlay));
     mjr_overlay(mjFONT_NORMAL, mjGRID_TOPLEFT, vp, overlay, NULL, &con);
 

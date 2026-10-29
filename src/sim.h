@@ -42,7 +42,8 @@ int      sim_body_pos(const char *name, double pos[3]);
 
 /* ---- [STATE MONITOR] actuator force ---- */
 
-/** Force currently output by an actuator (after gear ratio).
+/** Scalar actuator output, before transmission/gear scaling.
+ *  For this model's hinge motors, joint torque = actuator_force * gear.
  *  index: 0=yaw1 1=pitch1 2=yaw2 3=pitch2 4=yaw3 5=pitch3
  *  Returns 0.0 if index is out of range. */
 double   sim_actuator_force(int index);

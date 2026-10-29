@@ -14,6 +14,8 @@ robot 是以 C11 封裝 MuJoCo、用於機器手臂物理模擬與演算法實�
 | `build/` | CMake 產物；不作為原始碼真相來源 |
 | `CMakeLists.txt` | MuJoCo、GLFW、OpenGL 的建置設定 |
 | `build.bat` | Windows/MinGW 建置入口 |
+| `run.bat` | 固定正確工作目錄後啟動互動 viewer |
+| `tests/` | MuJoCo 模型與關節姿態控制 headless 驗證 |
 | `wf/` | 非侵入式工作流、導航與 open 狀態 |
 
 ## 工作流與共通知識

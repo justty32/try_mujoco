@@ -16,7 +16,7 @@
 |------|----------|
 | 程式入口與互動迴圈 | `src/main.c` |
 | MuJoCo 模型/data 生命週期與狀態查詢 | `src/sim.h`, `src/sim.c` |
-| 動作輸入與示範控制 | `src/controller.h`, `src/controller.c` |
+| 關節目標／姿態保持與定力矩示範控制 | `src/controller.h`, `src/controller.c` |
 | GLFW 視窗、相機、HUD | `src/viewer.h`, `src/viewer.c` |
 | MJCF 場景 | `assets/*.xml` |
 | 建置 | `CMakeLists.txt`, `build.bat` |

@@ -2,6 +2,8 @@
 
 評估日期：2026-08-10
 
+> 現況補註（2026-10-29）：互動 viewer 已加入具名關節目標、姿態保持與 headless 控制測試，操作見 [README](../README.md#操作說明)。下文是原評估基線；其中「沒有 position mode」已由本次互動關節控制補上，但尚無通用 action schema、instance-based core 或批次訓練 API，robot_core 計畫仍未開始。
+
 ## 結論
 
 目前環境適合「學 MuJoCo、驗證 MJCF、互動看關節運動」，但還不能稱為可大量訓練的機器人學習平台。選 MuJoCo 與 C 是合理的；缺的不是另一套物理引擎，而是物理核心外面的環境層：可重入 instance、reset/step 契約、任務與 reward、批次執行、紀錄、重播、測試和實驗管理。
