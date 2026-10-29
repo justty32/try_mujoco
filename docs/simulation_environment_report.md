@@ -4,6 +4,8 @@
 
 > 現況補註（2026-10-29）：互動 viewer 已加入具名關節目標、姿態保持與 headless 控制測試，操作見 [README](../README.md#操作說明)。下文是原評估基線；其中「沒有 position mode」已由本次互動關節控制補上，但尚無通用 action schema、instance-based core 或批次訓練 API，robot_core 計畫仍未開始。
 
+> 幾何補註（2026-10-29）：同一歷史檔名 `seven_cylinders.xml` 已換成六關節叉耳式模型，保留關節中心／軸／範圍與末端位置，補出轉盤、叉耳與轉軸的裝配間隙。原粗圓柱模型與本輪取樣／真實渲染均保存在 [幾何驗證紀錄](reports/geometry-2026-10-29/README.md)，可直接開 [比較頁](reports/geometry-2026-10-29/preview.html)。新模型以 1000 kg/m³ 的教學密度計算質量與慣量，仍非硬體校準；`pitch1 = -60°` 仍有真實基座／地面碰撞。下方「seven-cylinder 修正」保留為當時的歷史紀錄，不能視為現行外形或全姿態無碰撞證明。
+
 ## 結論
 
 目前環境適合「學 MuJoCo、驗證 MJCF、互動看關節運動」，但還不能稱為可大量訓練的機器人學習平台。選 MuJoCo 與 C 是合理的；缺的不是另一套物理引擎，而是物理核心外面的環境層：可重入 instance、reset/step 契約、任務與 reward、批次執行、紀錄、重播、測試和實驗管理。

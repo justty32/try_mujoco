@@ -1,0 +1,2681 @@
+{
+  "mujoco_version": "3.10.0",
+  "distance_tolerance_m": 1e-06,
+  "method": "instantaneous forward kinematics, no simulation steps",
+  "models": {
+    "before": {
+      "path": "docs/reports/geometry-2026-10-29/before.xml",
+      "sha256": "e660b41d45d6acff32b3278391fee063db1c0b64ae62b21a8475248d6d99f63d",
+      "body_mass_kg": [
+        0.0,
+        6.283185307179587,
+        4.523893421169302,
+        1.5707963267948968,
+        2.8274333882308142,
+        1.1451105222334794,
+        1.6084954386379744,
+        0.8042477193189872
+      ],
+      "zero_bias_nm": [
+        0.0,
+        19.97149798335018,
+        0.0,
+        5.9026135585218835,
+        0.0,
+        0.6311736101215413
+      ],
+      "samples": [
+        {
+          "name": "zero",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966138
+            }
+          ]
+        },
+        {
+          "name": "yaw1_-90",
+          "degrees": [
+            -90,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999996485
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823281
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.044999999999987265
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999980752294416
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966138
+            }
+          ]
+        },
+        {
+          "name": "yaw1_-60",
+          "degrees": [
+            -60,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.049999936660864136
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw1_-30",
+          "degrees": [
+            -30,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999644
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.049999936660864136
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw1_-10",
+          "degrees": [
+            -10,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086412
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346813
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.0399999886833489
+            }
+          ]
+        },
+        {
+          "name": "yaw1_+10",
+          "degrees": [
+            10,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086412
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999988683348905
+            }
+          ]
+        },
+        {
+          "name": "yaw1_+30",
+          "degrees": [
+            30,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086412
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999997434578
+            }
+          ]
+        },
+        {
+          "name": "yaw1_+60",
+          "degrees": [
+            60,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04999999999999645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086412
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346813
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw1_+90",
+          "degrees": [
+            90,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999996485
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998725
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499998075229442
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999999966
+            }
+          ]
+        },
+        {
+          "name": "pitch1_-60",
+          "degrees": [
+            0.0,
+            -60,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 11,
+          "penetrations": [
+            {
+              "a": "floor",
+              "b": "arm2_geom",
+              "distance_m": -0.00658965343808662
+            },
+            {
+              "a": "floor",
+              "b": "disc3_geom",
+              "distance_m": -0.053371685740841696
+            },
+            {
+              "a": "floor",
+              "b": "arm3_geom",
+              "distance_m": -0.10265371804359677
+            },
+            {
+              "a": "base_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.08660220512311856
+            },
+            {
+              "a": "base_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.03660253094948349
+            },
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.12499999999999999
+            },
+            {
+              "a": "disc1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04660229543960142
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823273
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000005
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966144
+            }
+          ]
+        },
+        {
+          "name": "pitch1_-30",
+          "degrees": [
+            0.0,
+            -30,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "base_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.013397434940615042
+            },
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.10999980218228166
+            },
+            {
+              "a": "disc1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.03339741609201244
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823279
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000005
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499999844211391
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999661424
+            }
+          ]
+        },
+        {
+          "name": "pitch1_-10",
+          "degrees": [
+            0.0,
+            -10,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 3,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.07083771211124594
+            },
+            {
+              "a": "disc1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.020837781317855048
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823277
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999999999
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499999844211391
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966138
+            }
+          ]
+        },
+        {
+          "name": "pitch1_+10",
+          "degrees": [
+            0.0,
+            10,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04924038765061039
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823281
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999999999
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499999844211391
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966139
+            }
+          ]
+        },
+        {
+          "name": "pitch1_+30",
+          "degrees": [
+            0.0,
+            30,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04330127018921645
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823277
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.0449999984421138
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999661445
+            }
+          ]
+        },
+        {
+          "name": "pitch1_+60",
+          "degrees": [
+            0.0,
+            60,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.02499999999978721
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999999952823277
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04500000000000002
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966143
+            }
+          ]
+        },
+        {
+          "name": "yaw2_-90",
+          "degrees": [
+            0.0,
+            0.0,
+            -90,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.004999721427107719
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.044999999999987265
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999980752294416
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966138
+            }
+          ]
+        },
+        {
+          "name": "yaw2_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            -60,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.004999298841189258
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999997434578
+            }
+          ]
+        },
+        {
+          "name": "yaw2_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            -30,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086417
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0049991598907869386
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999997434578
+            }
+          ]
+        },
+        {
+          "name": "yaw2_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            -10,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0025559565666067713
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346813
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999988683348905
+            }
+          ]
+        },
+        {
+          "name": "yaw2_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            10,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0025559565666067713
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999988683348905
+            }
+          ]
+        },
+        {
+          "name": "yaw2_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            30,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.049999936660864185
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0049991598907869386
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346813
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw2_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            60,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.004999298841189258
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998722
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999927393468114
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw2_+90",
+          "degrees": [
+            0.0,
+            0.0,
+            90,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.004999721427107719
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04499999999998725
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999980752294416
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999999966
+            }
+          ]
+        },
+        {
+          "name": "pitch2_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -60,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0249999448110403
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.11249999999999995
+            },
+            {
+              "a": "disc2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.02794223917276332
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.0449999984421139
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966138
+            }
+          ]
+        },
+        {
+          "name": "pitch2_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -30,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 2,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.01035894199398964
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.09499979041917986
+            },
+            {
+              "a": "disc2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.013397441815700508
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499999844211391
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966146
+            }
+          ]
+        },
+        {
+          "name": "pitch2_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -10,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 3,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "arm1_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.005607668677240285
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.0623646661461097
+            },
+            {
+              "a": "disc2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.0015190930108819295
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113893
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966141
+            }
+          ]
+        },
+        {
+          "name": "pitch2_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            10,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04431634888554937
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.0449999984421139
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966141
+            }
+          ]
+        },
+        {
+          "name": "pitch2_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            30,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.03897114317028052
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966136
+            }
+          ]
+        },
+        {
+          "name": "pitch2_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            60,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.02249999999945429
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.0449999984421139
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999661466
+            }
+          ]
+        },
+        {
+          "name": "yaw3_-90",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -90,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999675105695778
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999999966139
+            }
+          ]
+        },
+        {
+          "name": "yaw3_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -60,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346815
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999233834261979
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999999997434578
+            }
+          ]
+        },
+        {
+          "name": "yaw3_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -30,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 3,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346815
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999034320890826
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999974345786
+            }
+          ]
+        },
+        {
+          "name": "yaw3_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -10,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999980752294416
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.0024228640213799
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999988683348905
+            }
+          ]
+        },
+        {
+          "name": "yaw3_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            10,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999980752294416
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.0024228640213799
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999988683348905
+            }
+          ]
+        },
+        {
+          "name": "yaw3_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 3,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346815
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999034320890826
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw3_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            60,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346816
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999233834261979
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03999995255410385
+            }
+          ]
+        },
+        {
+          "name": "yaw3_+90",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            90,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.004999675105695778
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039999999999999966
+            }
+          ]
+        },
+        {
+          "name": "pitch3_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -60
+          ],
+          "required_clear": false,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.022499950529358128
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.1
+            }
+          ]
+        },
+        {
+          "name": "pitch3_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -30
+          ],
+          "required_clear": true,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.009689067264778976
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.07999984431272504
+            }
+          ]
+        },
+        {
+          "name": "pitch3_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -10
+          ],
+          "required_clear": true,
+          "engine_contacts": 1,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "arm2_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.005531714248474855
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.053891656863324394
+            }
+          ]
+        },
+        {
+          "name": "pitch3_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            10
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.039392310120488265
+            }
+          ]
+        },
+        {
+          "name": "pitch3_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03464101615137739
+            }
+          ]
+        },
+        {
+          "name": "pitch3_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            60
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.049999999999999975
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.0499999995282328
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.045000000000000026
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.044999998442113935
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.01999999999999991
+            }
+          ]
+        },
+        {
+          "name": "mixed_a",
+          "degrees": [
+            20,
+            25,
+            -15,
+            15,
+            10,
+            20
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04531538934251649
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.04999993666086413
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.04346644166162354
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346805
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03758755301664598
+            }
+          ]
+        },
+        {
+          "name": "mixed_b",
+          "degrees": [
+            -25,
+            40,
+            20,
+            10,
+            -15,
+            15
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": [
+            {
+              "a": "disc1_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.038302222155497785
+            },
+            {
+              "a": "arm1_geom",
+              "b": "disc2_geom",
+              "distance_m": -0.049999936660864185
+            },
+            {
+              "a": "disc2_geom",
+              "b": "arm2_geom",
+              "distance_m": -0.044316348779138
+            },
+            {
+              "a": "arm2_geom",
+              "b": "disc3_geom",
+              "distance_m": -0.04499992739346808
+            },
+            {
+              "a": "disc3_geom",
+              "b": "arm3_geom",
+              "distance_m": -0.03863703022198157
+            }
+          ]
+        }
+      ]
+    },
+    "after": {
+      "path": "assets/seven_cylinders.xml",
+      "sha256": "f2db7c31ca1be87dbfe8331923efe6bd776ef93b175ad849002d0d3f424b0dbd",
+      "body_mass_kg": [
+        0.0,
+        6.326614684022813,
+        0.05453805087786708,
+        0.13182122774462773,
+        0.05133805087786709,
+        0.12553804243744815,
+        0.04813805087786708,
+        0.08252754461470148
+      ],
+      "zero_bias_nm": [
+        0.0,
+        1.1276748393895248,
+        0.0,
+        0.38824903811864925,
+        0.0,
+        0.04061330973721522
+      ],
+      "samples": [
+        {
+          "name": "zero",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_-90",
+          "degrees": [
+            -90,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_-60",
+          "degrees": [
+            -60,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_-30",
+          "degrees": [
+            -30,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_-10",
+          "degrees": [
+            -10,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_+10",
+          "degrees": [
+            10,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_+30",
+          "degrees": [
+            30,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_+60",
+          "degrees": [
+            60,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw1_+90",
+          "degrees": [
+            90,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch1_-60",
+          "degrees": [
+            0.0,
+            -60,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 10,
+          "penetrations": [
+            {
+              "a": "floor",
+              "b": "yaw3_seat",
+              "distance_m": -0.010874263128913129
+            },
+            {
+              "a": "floor",
+              "b": "arm3_geom",
+              "distance_m": -0.07899346400575237
+            },
+            {
+              "a": "floor",
+              "b": "tip_geom",
+              "distance_m": -0.08399346400575236
+            },
+            {
+              "a": "base_geom",
+              "b": "arm1_geom",
+              "distance_m": -0.04660232445526683
+            },
+            {
+              "a": "base_geom",
+              "b": "yaw2_seat",
+              "distance_m": -0.022392209651685525
+            }
+          ]
+        },
+        {
+          "name": "pitch1_-30",
+          "degrees": [
+            0.0,
+            -30,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch1_-10",
+          "degrees": [
+            0.0,
+            -10,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch1_+10",
+          "degrees": [
+            0.0,
+            10,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch1_+30",
+          "degrees": [
+            0.0,
+            30,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch1_+60",
+          "degrees": [
+            0.0,
+            60,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_-90",
+          "degrees": [
+            0.0,
+            0.0,
+            -90,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            -60,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            -30,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            -10,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            10,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            30,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            60,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw2_+90",
+          "degrees": [
+            0.0,
+            0.0,
+            90,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -60,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -30,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            -10,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            10,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            30,
+            0.0,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch2_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            60,
+            0.0,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_-90",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -90,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -60,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -30,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -10,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            10,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30,
+            0.0
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            60,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "yaw3_+90",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            90,
+            0.0
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_-60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -60
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_-30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -30
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_-10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -10
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_+10",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            10
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_+30",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            30
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "pitch3_+60",
+          "degrees": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            60
+          ],
+          "required_clear": false,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "mixed_a",
+          "degrees": [
+            20,
+            25,
+            -15,
+            15,
+            10,
+            20
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        },
+        {
+          "name": "mixed_b",
+          "degrees": [
+            -25,
+            40,
+            20,
+            10,
+            -15,
+            15
+          ],
+          "required_clear": true,
+          "engine_contacts": 0,
+          "penetrations": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "renderer": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "width": 600,
+  "height": 400,
+  "model_sha256": "f2db7c31ca1be87dbfe8331923efe6bd776ef93b175ad849002d0d3f424b0dbd",
+  "views": [
+    {
+      "file": "after-overview.png",
+      "degrees": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lookat": [
+        0.22,
+        0.0,
+        0.3
+      ],
+      "distance": 1.15,
+      "azimuth": 135.0,
+      "elevation": -22.0
+    },
+    {
+      "file": "after-joint.png",
+      "degrees": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "lookat": [
+        0.2,
+        0.0,
+        0.35
+      ],
+      "distance": 0.42,
+      "azimuth": 135.0,
+      "elevation": -22.0
+    },
+    {
+      "file": "after-pose.png",
+      "degrees": [
+        20,
+        25,
+        -15,
+        15,
+        10,
+        20
+      ],
+      "lookat": [
+        0.17,
+        0.0,
+        0.43
+      ],
+      "distance": 1.65,
+      "azimuth": 135.0,
+      "elevation": -22.0
+    }
+  ]
+}

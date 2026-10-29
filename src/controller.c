@@ -21,40 +21,17 @@ static const double PHASES[3][CTRL_JOINT_COUNT] = {
 #define POSE_KP 64.0
 #define POSE_KD 16.0
 static int phase = 1, mode = CTRL_MODE_PHASE, ready;
-static mjModel *bound_model;
 static int joint_id[CTRL_JOINT_COUNT], motor_id[CTRL_JOINT_COUNT];
 static double target[CTRL_JOINT_COUNT], reference[CTRL_JOINT_COUNT];
-static double saved_range[CTRL_JOINT_COUNT][2];
-static int saved_limited[CTRL_JOINT_COUNT];
 
 static double clamp(double value, double low, double high) {
     return fmax(low, fmin(high, value));
 }
 static int valid_joint(int i) { return ready && i >= 0 && i < CTRL_JOINT_COUNT; }
 
-/* Only pose mode needs a stronger shoulder motor: at zero posture gravity
- * requires ~20 Nm but the original pitch1 limit is 10 Nm (gear=10, ctrl=1).
- * All old presets retain both their original commands and original limits. */
-static void set_limits(int pose) {
-    mjModel *m = sim_model();
-    for (int i = 0; i < CTRL_JOINT_COUNT; ++i) {
-        int a = motor_id[i];
-        m->actuator_ctrllimited[a] = saved_limited[i];
-        m->actuator_ctrlrange[2*a] = saved_range[i][0];
-        m->actuator_ctrlrange[2*a+1] = saved_range[i][1];
-        if (pose && i == 1) {
-            m->actuator_ctrllimited[a] = 1;
-            m->actuator_ctrlrange[2*a] = -4;
-            m->actuator_ctrlrange[2*a+1] = 4;
-        }
-    }
-}
-
 void ctrl_init(void) {
     mjModel *m = sim_model();
-    if (ready && bound_model == m) set_limits(0);
     ready = 0;
-    bound_model = m;
     phase = 1;
     mode = CTRL_MODE_PHASE;
     if (m->nv != CTRL_JOINT_COUNT) {
@@ -72,9 +49,6 @@ void ctrl_init(void) {
         }
         joint_id[i] = j;
         motor_id[i] = a;
-        saved_range[i][0] = m->actuator_ctrlrange[2*a];
-        saved_range[i][1] = m->actuator_ctrlrange[2*a+1];
-        saved_limited[i] = m->actuator_ctrllimited[a];
     }
     ready = 1;
     ctrl_hold_current();
@@ -85,7 +59,6 @@ void ctrl_set_phase(int p) {
     if (!ready || p < 1 || p > 3) return;
     phase = p;
     mode = CTRL_MODE_PHASE;
-    set_limits(0);
 }
 int ctrl_get_phase(void) { return phase; }
 int ctrl_get_mode(void) { return mode; }
@@ -110,7 +83,6 @@ void ctrl_hold_current(void) {
         target[i] = clamp(reference[i], m->jnt_range[2*j], m->jnt_range[2*j+1]);
     }
     mode = CTRL_MODE_POSE;
-    set_limits(1);
 }
 int ctrl_set_target_deg(int i, double degrees) {
     if (!valid_joint(i) || !isfinite(degrees)) return -1;
@@ -155,6 +127,14 @@ void ctrl_apply(void) {
     /* Inertia scaling keeps the light distal joints from receiving excessive
      * explicit damping. Compensate model damping, but never contact forces. */
     mj_mulM(m, d, torque, acceleration);
+    /* Euler solves joint damping with M + dt*D. Include that same effective
+     * inertia, otherwise damping compensation slows light joints drastically.
+     * Keep the physical damping and the controller gains unchanged. */
+    if (m->opt.integrator == mjINT_EULER &&
+        !(m->opt.disableflags & (mjDSBL_EULERDAMP | mjDSBL_DAMPER))) {
+        for (int v = 0; v < m->nv; ++v)
+            torque[v] += m->opt.timestep * m->dof_damping[v] * acceleration[v];
+    }
     for (int i = 0; i < CTRL_JOINT_COUNT; ++i) {
         int j = joint_id[i], a = motor_id[i], dof = m->jnt_dofadr[j];
         double u = (torque[dof] + d->qfrc_bias[dof] - d->qfrc_passive[dof]) /

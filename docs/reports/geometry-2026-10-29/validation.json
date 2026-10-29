@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-29",
+  "build_command": "cmd /c build.bat",
+  "build_exit_code": 0,
+  "ctest_command": "ctest --test-dir build --output-on-failure -j1",
+  "ctest_passed": 3,
+  "ctest_total": 3,
+  "ctest_wall_seconds": 0.36,
+  "controller_metrics": [
+    "horizontal hold: max error 0.000000 deg, speed 0.000000 deg/s",
+    "combined target: max error 0.000000 deg, speed 0.000000 deg/s",
+    "continued hold: max error 0.000000 deg, speed 0.000000 deg/s",
+    "second target: max error 0.000000 deg, speed 0.000000 deg/s",
+    "capture current: max error 0.000000 deg, speed 0.000000 deg/s",
+    "return to zero: max error 0.000000 deg, speed 0.000000 deg/s",
+    "reset hold: max error 0.000000 deg, speed 0.000000 deg/s",
+    "damping option: max error 0.000000 deg, speed 0.000000 deg/s",
+    "damping option: max error 0.000000 deg, speed 0.000000 deg/s"
+  ],
+  "negative_controls": [
+    {
+      "case": "missing_bridge",
+      "observed_exit_code": 1,
+      "log": "geometry_missing_bridge.log"
+    },
+    {
+      "case": "thick_beam",
+      "observed_exit_code": 1,
+      "log": "geometry_thick_beam.log"
+    }
+  ],
+  "source_sha256": {
+    "assets/seven_cylinders.xml": "f2db7c31ca1be87dbfe8331923efe6bd776ef93b175ad849002d0d3f424b0dbd",
+    "src/controller.c": "e386ee05340d4ffe14b8ecc05052e92e0877dabd54139169fe97bdd4b56074e5",
+    "tests/seven_cylinders_test.c": "3a2cac94e2da803173c2c03e29f0eb13cc995842537d9641f043496c4b35223b",
+    "tests/controller_pose_test.c": "05129d720aab38fe05a3820747c5d933d4f2125325bc35de8c5ded47ff6472ca",
+    "tests/arm_geometry_test.c": "2c1734dc433306537b3cb60f90d88e9fff4a969968aea1cc5c37a44f9c961dc0"
+  },
+  "limitations": [
+    "45 instantaneous geometry samples, not global collision freedom",
+    "Interactive GUI keyboard operation has not been exercised"
+  ]
+}

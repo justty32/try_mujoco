@@ -1,0 +1,4 @@
+missing assembly part: disc2_geom / fork2_bridge
+missing assembly part: fork2_bridge / fork2_left
+missing assembly part: fork2_bridge / fork2_right
+arm_geometry: FAILED (27 clear poses, connected supports, collision preserved)

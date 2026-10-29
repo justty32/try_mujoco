@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>六關節手臂：外形修改前後</title>
+  <style>
+    :root{color-scheme:light;--ink:#183343;--muted:#546976;--line:#d4e1e7;--accent:#147d73}
+    *{box-sizing:border-box}body{margin:0;background:#f0f5f7;color:var(--ink);font:16px/1.65 system-ui,sans-serif}
+    main{max-width:1280px;margin:auto;padding:28px 20px 48px}h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.2;margin:.4em 0}
+    h2{font-size:1.35rem;margin:0 0 .3em}p{margin:.6em 0}a{color:#096d76;text-underline-offset:.2em}a:focus-visible,summary:focus-visible{outline:3px solid #e4a126;outline-offset:4px}
+    .eyebrow{color:var(--accent);font-size:.85rem;font-weight:700;letter-spacing:.06em}.lead{max-width:850px;font-size:1.1rem}.muted,figcaption{color:var(--muted)}
+    .links{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0}.note{background:#fff9e8;border-left:4px solid #cb9a28;padding:14px 18px;border-radius:5px;margin:22px 0}
+    section{margin:30px 0}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}
+    figure{margin:0;min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.label{padding:10px 16px;font-weight:700}.after .label{background:#e3f2ed;color:#106c5c}
+    img{display:block;width:100%;height:auto;background:#000}figcaption{padding:12px 16px;font-size:.94rem}
+    details{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-top:20px}summary{cursor:pointer;font-weight:700}code{overflow-wrap:anywhere;font-size:.93em;background:#e6eef2;padding:.1em .3em;border-radius:4px}
+    .pill{display:inline-block;border:1px solid #b9d5d0;border-radius:99px;padding:3px 10px;font-size:.85rem;color:#18645d;background:#ecf7f3;margin-right:8px}
+    @media(max-width:720px){main{padding:20px 12px 36px}.pair{grid-template-columns:1fr;gap:12px}.label{padding:8px 12px}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">ROBOT · 2026-10-29 · 同相機前後比較</div>
+    <h1>保留六個關節，讓裝配與轉動空間看得清楚</h1>
+    <p class="lead">粗圓柱改成薄轉盤、叉耳、轉軸與細連桿。關節位置與角度範圍保留，實體也參與碰撞。</p>
+    <p><span class="pill">真實 MuJoCo 模型渲染</span><span class="pill">本地圖片・可離線開啟</span></p>
+    <nav class="links" aria-label="相關文件">
+      <a href="../../index.html">API 與操作說明</a>
+      <a href="README.md">完整驗證紀錄</a>
+      <a href="geometry_samples.json">逐姿態原始數據</a>
+    </nav>
+  </header>
+
+  <aside class="note"><strong>結論的邊界：</strong>27 個指定快照均無跨 body 穿透；這不是所有姿態都不會碰撞的保證。肩部 pitch1 到 −60°、其他角度為零時，仍會碰到基座與地面。</aside>
+
+  <section aria-labelledby="overview">
+    <h2 id="overview">1. 全貌：六個關節與末端位置不變</h2>
+    <p class="muted">兩張都是零姿態。修改後可分辨承座、轉盤、叉耳與連桿的分工。</p>
+    <div class="pair">
+      <figure>
+        <div class="label">修改前 · 粗圓柱模型</div>
+        <a href="before-overview.png"><img src="before-overview.png" width="600" height="400" alt="修改前零姿態全貌，三組粗圓盤與粗連桿串聯在底座上"></a>
+        <figcaption>保留為本輪對照快照，尚未補出清楚的關節裝配空間。</figcaption>
+      </figure>
+      <figure class="after">
+        <div class="label">修改後 · 六關節叉耳式模型</div>
+        <a href="after-overview.png"><img src="after-overview.png" width="600" height="400" alt="修改後零姿態全貌，可見三組薄轉盤、叉耳與綠色細連桿"></a>
+        <figcaption>綠色細連桿半徑 10 mm；灰色結構支撐轉軸，橘色薄盤負責 yaw。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="joint">
+    <h2 id="joint">2. 關節近景：看得到轉軸與間隙</h2>
+    <p class="muted">相同零姿態、相同放大相機。這次處理的是裝配穿插與轉動空間，沒有關閉碰撞。</p>
+    <div class="pair">
+      <figure>
+        <div class="label">修改前 · 轉盤與連桿互相穿插</div>
+        <a href="before-joint.png"><img src="before-joint.png" width="600" height="400" loading="lazy" alt="修改前關節近景，粗連桿進入相鄰圓盤的體積"></a>
+        <figcaption>簡化父子幾何重疊不必然讓模擬失效，但無法清楚表達裝配間隙。</figcaption>
+      </figure>
+      <figure class="after">
+        <div class="label">修改後 · 叉耳托住 pitch 轉軸</div>
+        <a href="after-joint.png"><img src="after-joint.png" width="600" height="400" loading="lazy" alt="修改後關節近景，左右叉耳托住水平轉軸，細連桿從輪轂延伸"></a>
+        <figcaption>固定座、薄轉盤、左右耳與轉軸各有清楚位置；跨 body 距離另以 MuJoCo 量測。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="pose">
+    <h2 id="pose">3. 組合姿態：不只看水平伸直</h2>
+    <p class="muted">前後都設定 <code>[20, 25, −15, 15, 10, 20]°</code>，順序為 yaw1、pitch1、yaw2、pitch2、yaw3、pitch3。</p>
+    <div class="pair">
+      <figure>
+        <div class="label">修改前 · mixed_a</div>
+        <a href="before-pose.png"><img src="before-pose.png" width="600" height="400" loading="lazy" alt="修改前粗圓柱模型在 mixed_a 六關節組合角度下的實際渲染"></a>
+        <figcaption>以指定角度直接做 forward kinematics，未執行姿態控制或動態模擬。</figcaption>
+      </figure>
+      <figure class="after">
+        <div class="label">修改後 · mixed_a</div>
+        <a href="after-pose.png"><img src="after-pose.png" width="600" height="400" loading="lazy" alt="修改後叉耳式手臂在相同 mixed_a 角度下，細連桿抬起並旋轉"></a>
+        <figcaption>此快照的跨 body 距離檢查無穿透，MuJoCo 引擎接觸數為零。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <details>
+    <summary>展開：怎麼驗證、圖片怎麼來</summary>
+    <p>使用 MuJoCo 3.10.0 與 llvmpipe 軟體渲染。六張 PNG 都是原始模型渲染像素，沒有生成式圖片或修圖；每張 600 × 400，前後相機參數一致。</p>
+    <p>每份模型取樣 45 個靜態快照；27 個指定無穿透快照包括零姿態、每個關節單獨 ±10°／±30°，以及兩個組合姿態。其餘大角度用來記錄碰撞邊界，不視為全部必須安全。</p>
+    <p>模型以 1000 kg/m³ 的教學密度計算質量與慣量，尚未校準到真實硬體。幾何取樣不等於連續路徑、動態控制或全域碰撞驗證。</p>
+    <p>來源：<a href="before.xml">修改前模型</a>、<a href="../../../assets/seven_cylinders.xml">目前模型</a>、<a href="before-render.json">修改前相機紀錄</a>、<a href="after-render.json">修改後相機紀錄</a>、<a href="inspect_geometry.py">取樣與渲染腳本</a>。</p>
+  </details>
+</main>
+</body>
+</html>

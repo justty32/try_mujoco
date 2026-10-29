@@ -5,7 +5,7 @@ enum CtrlMode { CTRL_MODE_PHASE, CTRL_MODE_POSE };
 
 /* Call after sim_load(); starts in pose mode, holding the current angles. */
 void ctrl_init(void);
-/* Legacy torque presets; restores the model's original motor control limits. */
+/* Legacy torque presets; all modes keep the model's motor control limits. */
 void ctrl_set_phase(int phase);   /* 1=all yaw  2=all pitch  3=all reverse */
 int  ctrl_get_phase(void);
 int  ctrl_get_mode(void);

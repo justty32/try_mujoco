@@ -1,63 +1,88 @@
-<mujoco model="seven_cylinders_arm">
+<mujoco model="six_joint_yaw_pitch_arm">
   <compiler angle="degree"/>
   <option timestep="0.002"/>
-  <statistic center="0.25 0 0.35" extent="0.8"/>
-
+  <statistic center="0.25 0 0.30" extent="0.8"/>
+  <!-- Teaching prototype: uniform density, not calibrated hardware data.
+       All solid geoms are both visible and collidable. Joint centers and
+       axes are preserved; the fork, shaft, and beam define real clearance. -->
   <default>
     <joint damping="1"/>
+    <geom density="1000"/>
     <motor ctrllimited="true" ctrlrange="-1 1"/>
+    <default class="seat">
+      <geom type="cylinder" size="0.024 0.012" rgba="0.22 0.28 0.35 1"/>
+    </default>
+    <default class="rotor">
+      <geom type="cylinder" size="0.020 0.004" rgba="0.95 0.52 0.20 1"/>
+    </default>
+    <default class="fork">
+      <geom type="box" rgba="0.35 0.42 0.50 1"/>
+    </default>
+    <default class="bearing">
+      <geom type="cylinder" size="0.016" rgba="0.35 0.42 0.50 1"/>
+    </default>
+    <default class="shaft">
+      <geom type="cylinder" size="0.008" rgba="0.95 0.72 0.25 1"/>
+    </default>
+    <default class="hub">
+      <geom type="cylinder" size="0.016" rgba="0.20 0.72 0.58 1"/>
+    </default>
+    <default class="beam">
+      <geom type="cylinder" size="0.010" rgba="0.20 0.72 0.58 1"/>
+    </default>
   </default>
-
   <worldbody>
-    <geom name="floor" size="2 2 .05" type="plane" rgba="0.8 0.8 0.8 1"/>
+    <geom name="floor" size="2 2 .05" type="plane" rgba="0.88 0.90 0.92 1"/>
     <light pos="0 0 4"/>
-
-    <!--
-      七段 = 固定底座 + 3 組 (yaw 旋轉盤 + pitch 水平臂)，共 6 DoF。
-      cylinder 的 size="radius half-length"；每支臂的 body 原點在關節，
-      geom 中心移到臂長一半，下一個 body 則放在完整臂長的位置。
-    -->
-
-    <!-- Seg 1: 固定底座，半徑 0.10、總高 0.20。 -->
     <body name="base_cylinder" pos="0 0 0.10">
-      <geom name="base_geom" type="cylinder" size="0.10 0.10" rgba="0.2 0.6 0.8 1"/>
-
-      <!-- Seg 2: yaw1 旋轉盤，body 原點在底座頂面。 -->
-      <body name="disc1" pos="0 0 0.10">
+      <geom name="base_geom" type="cylinder" size="0.10 0.10" rgba="0.20 0.40 0.60 1"/>
+      <geom name="yaw1_seat" class="seat" pos="0 0 0.10"/>
+      <!-- Stage 1: yaw bearing -> supported fork -> pitch shaft -> beam. -->
+      <body name="disc1" pos="0 0 0.100">
         <joint name="yaw1" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
-        <geom name="disc1_geom" type="cylinder" pos="0 0 0.05"
-              size="0.12 0.05" rgba="0.9 0.4 0.3 1"/>
-
-        <!-- Seg 3: pitch1 水平臂，沿 +X 延伸 0.20；正角度繞 -Y 軸抬升。 -->
-        <body name="arm1" pos="0 0 0.10">
+        <geom name="disc1_geom" class="rotor" pos="0 0 0.016"/>
+        <geom name="fork1_bridge" class="fork" pos="0 0 0.023" size="0.010 0.033 0.003"/>
+        <geom name="fork1_left" class="fork" pos="0 0.028 0.058" size="0.008 0.005 0.032"/>
+        <geom name="bearing1_left" class="bearing" fromto="0 0.023 0.100 0 0.033 0.100"/>
+        <geom name="fork1_right" class="fork" pos="0 -0.028 0.058" size="0.008 0.005 0.032"/>
+        <geom name="bearing1_right" class="bearing" fromto="0 -0.033 0.100 0 -0.023 0.100"/>
+        <body name="arm1" pos="0 0 0.100">
           <joint name="pitch1" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
-          <geom name="arm1_geom" type="cylinder" pos="0.10 0 0"
-                size="0.05 0.10" euler="0 90 0" rgba="0.3 0.8 0.4 1"/>
-
-          <!-- Seg 4: yaw2 旋轉盤，接在 arm1 末端。 -->
-          <body name="disc2" pos="0.20 0 0">
+          <geom name="pitch1_shaft" class="shaft" fromto="0 -0.023 0 0 0.023 0"/>
+          <geom name="pitch1_hub" class="hub" fromto="0 -0.016 0 0 0.016 0"/>
+          <geom name="arm1_geom" class="beam" fromto="0.012 0 0 0.182 0 0"/>
+          <geom name="yaw2_seat" class="seat" pos="0.200 0 0"/>
+          <!-- Stage 2: yaw bearing -> supported fork -> pitch shaft -> beam. -->
+          <body name="disc2" pos="0.200 0 0">
             <joint name="yaw2" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
-            <geom name="disc2_geom" type="cylinder" pos="0 0 0.045"
-                  size="0.10 0.045" rgba="0.9 0.55 0.25 1"/>
-
-            <!-- Seg 5: pitch2 水平臂，沿 +X 延伸 0.18；正角度抬升。 -->
-            <body name="arm2" pos="0 0 0.09">
+            <geom name="disc2_geom" class="rotor" pos="0 0 0.016"/>
+            <geom name="fork2_bridge" class="fork" pos="0 0 0.023" size="0.010 0.033 0.003"/>
+            <geom name="fork2_left" class="fork" pos="0 0.028 0.053" size="0.008 0.005 0.027"/>
+            <geom name="bearing2_left" class="bearing" fromto="0 0.023 0.090 0 0.033 0.090"/>
+            <geom name="fork2_right" class="fork" pos="0 -0.028 0.053" size="0.008 0.005 0.027"/>
+            <geom name="bearing2_right" class="bearing" fromto="0 -0.033 0.090 0 -0.023 0.090"/>
+            <body name="arm2" pos="0 0 0.090">
               <joint name="pitch2" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
-              <geom name="arm2_geom" type="cylinder" pos="0.09 0 0"
-                    size="0.045 0.09" euler="0 90 0" rgba="0.4 0.85 0.35 1"/>
-
-              <!-- Seg 6: yaw3 旋轉盤，接在 arm2 末端。 -->
-              <body name="disc3" pos="0.18 0 0">
+              <geom name="pitch2_shaft" class="shaft" fromto="0 -0.023 0 0 0.023 0"/>
+              <geom name="pitch2_hub" class="hub" fromto="0 -0.016 0 0 0.016 0"/>
+              <geom name="arm2_geom" class="beam" fromto="0.012 0 0 0.162 0 0"/>
+              <geom name="yaw3_seat" class="seat" pos="0.180 0 0"/>
+              <!-- Stage 3: yaw bearing -> supported fork -> pitch shaft -> beam. -->
+              <body name="disc3" pos="0.180 0 0">
                 <joint name="yaw3" type="hinge" axis="0 0 1" range="-90 90" limited="true"/>
-                <geom name="disc3_geom" type="cylinder" pos="0 0 0.04"
-                      size="0.08 0.04" rgba="0.9 0.7 0.2 1"/>
-
-                <!-- Seg 7: pitch3 水平臂，沿 +X 延伸 0.16；正角度抬升。 -->
-                <body name="arm3" pos="0 0 0.08">
+                <geom name="disc3_geom" class="rotor" pos="0 0 0.016"/>
+                <geom name="fork3_bridge" class="fork" pos="0 0 0.023" size="0.010 0.033 0.003"/>
+                <geom name="fork3_left" class="fork" pos="0 0.028 0.048" size="0.008 0.005 0.022"/>
+                <geom name="bearing3_left" class="bearing" fromto="0 0.023 0.080 0 0.033 0.080"/>
+                <geom name="fork3_right" class="fork" pos="0 -0.028 0.048" size="0.008 0.005 0.022"/>
+                <geom name="bearing3_right" class="bearing" fromto="0 -0.033 0.080 0 -0.023 0.080"/>
+                <body name="arm3" pos="0 0 0.080">
                   <joint name="pitch3" type="hinge" axis="0 -1 0" range="-60 60" limited="true"/>
-                  <geom name="arm3_geom" type="cylinder" pos="0.08 0 0"
-                        size="0.04 0.08" euler="0 90 0" rgba="0.3 0.8 0.45 1"/>
-                  <site name="end_effector" pos="0.16 0 0" size="0.015" rgba="1 0.1 0.1 1"/>
+                  <geom name="pitch3_shaft" class="shaft" fromto="0 -0.023 0 0 0.023 0"/>
+                  <geom name="pitch3_hub" class="hub" fromto="0 -0.016 0 0 0.016 0"/>
+                  <geom name="arm3_geom" class="beam" fromto="0.012 0 0 0.150 0 0"/>
+                  <geom name="tip_geom" type="sphere" size="0.010" pos="0.150 0 0" rgba="0.20 0.72 0.58 1"/>
+                  <site name="end_effector" pos="0.160 0 0" size="0.006" rgba="1 0.1 0.1 1"/>
                 </body>
               </body>
             </body>
@@ -66,7 +91,6 @@
       </body>
     </body>
   </worldbody>
-
   <actuator>
     <motor name="yaw1_motor" joint="yaw1" gear="10"/>
     <motor name="pitch1_motor" joint="pitch1" gear="10"/>

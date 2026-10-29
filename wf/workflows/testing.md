@@ -12,5 +12,6 @@
 ## 驗證原則
 
 - `seven_cylinders_model` 會以 MuJoCo loader 載入模型，檢查 7 段／6 關節／6 actuator、交替 yaw/pitch 軸、零姿態連接座標、end-effector site，以及短步進後的有限數值。
+- `arm_geometry` 另查叉架支撐連接、包含父子 body 的明確 geom 距離，以及 27 個代表姿態的間隙；這不代表關節範圍內所有組合都無碰撞。`controller_pose` 驗證追蹤／保持、限位／限幅、重置、舊模式與真實接觸阻擋時的有限數值。
 - 其他 MJCF 修改也要以 MuJoCo loader 實際載入；必要時增加正式 headless smoke check，檢查模型尺寸、名稱、joint/site 座標與有限數值。
 - viewer 是人工除錯工具。人工視覺驗證無法取代 headless 的數值測試；若本環境無法判斷外觀，將項目記入 [WAIT_USER.md](../WAIT_USER.md)。

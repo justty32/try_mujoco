@@ -125,7 +125,7 @@ static void build_overlay(char *buf, int bufsz) {
         "Drag: left=rotate  right=pan  scroll=zoom",
         d->time, paused ? "  PAUSED" : "",
         pose ? "POSE HOLD" : "FORCE PRESET (targets inactive)",
-        pose ? "Target ramp: 30 deg/s | pitch1 torque limit: +/-40 Nm"
+        pose ? "Target ramp: 30 deg/s | motor limits: +/-10 / 9 / 8 Nm"
              : "Original motor limits | press P to hold current pose",
         rows, ctrl_joint_name(selected_joint),
         ctrl_get_min_deg(selected_joint), ctrl_get_max_deg(selected_joint),

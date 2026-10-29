@@ -103,9 +103,9 @@ int main(int argc, char **argv) {
     }
 
     static const ExpectedArmGeom ARM_GEOMS[] = {
-        {"arm1_geom", {0.10, 0.0, 0.30}, {0.20, 0.0, 0.30}, 0.10},
-        {"arm2_geom", {0.29, 0.0, 0.39}, {0.38, 0.0, 0.39}, 0.09},
-        {"arm3_geom", {0.46, 0.0, 0.47}, {0.54, 0.0, 0.47}, 0.08},
+        {"arm1_geom", {0.097, 0.0, 0.30}, {0.182, 0.0, 0.30}, 0.085},
+        {"arm2_geom", {0.287, 0.0, 0.39}, {0.362, 0.0, 0.39}, 0.075},
+        {"arm3_geom", {0.461, 0.0, 0.47}, {0.530, 0.0, 0.47}, 0.069},
     };
     const double expected_arm_axis[3] = {1.0, 0.0, 0.0};
     for (int i = 0; i < ARRAY_LEN(ARM_GEOMS); ++i) {
@@ -121,6 +121,9 @@ int main(int argc, char **argv) {
 
         const mjtNum *rotation = data->geom_xmat + 9 * id;
         mjtNum axis[3] = {rotation[2], rotation[5], rotation[8]};
+        /* A cylinder has an unoriented long axis. MJCF fromto can compile
+         * either local Z sign; verify the same world-space solid endpoints. */
+        if (axis[0] < 0) for (int j = 0; j < 3; ++j) axis[j] = -axis[j];
         ok &= check_vec3("geom long axis", ARM_GEOMS[i].name, axis,
                          expected_arm_axis, 1e-9);
 

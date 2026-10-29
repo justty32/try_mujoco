@@ -5,6 +5,8 @@
 
 #define CHECK(c, label) do { if (!(c)) { fprintf(stderr, "FAIL: %s\n", label); ok = 0; } } while (0)
 
+static int saw_contact;
+
 static int advance(double seconds) {
     mjModel *m = sim_model();
     mjData *d = sim_data();
@@ -17,6 +19,7 @@ static int advance(double seconds) {
                  (d->ctrl[a] < m->actuator_ctrlrange[2*a] - 1e-10 ||
                   d->ctrl[a] > m->actuator_ctrlrange[2*a+1] + 1e-10))) return 0;
         sim_step();
+        if (d->ncon > 0) saw_contact = 1;
         for (int q = 0; q < m->nq; ++q) if (!isfinite(d->qpos[q])) return 0;
         for (int v = 0; v < m->nv; ++v) if (!isfinite(d->qvel[v])) return 0;
         for (int w = 0; w < mjNWARNING; ++w) if (d->warning[w].number) return 0;
@@ -48,7 +51,7 @@ int main(int argc, char **argv) {
     mjData *d = sim_data();
     int shoulder = mj_name2id(m, mjOBJ_ACTUATOR, "pitch1_motor");
     CHECK(ctrl_get_mode() == CTRL_MODE_POSE, "startup pose mode");
-    CHECK(m->actuator_ctrlrange[2*shoulder+1] == 4, "pose shoulder capacity");
+    CHECK(m->actuator_ctrlrange[2*shoulder+1] == 1, "pose preserves original shoulder capacity");
     CHECK(advance(3.0), "startup finite/limited");
     CHECK(settled("horizontal hold", 0.25), "horizontal posture resists gravity");
 
@@ -116,10 +119,23 @@ int main(int argc, char **argv) {
     CHECK(settled("reset hold", 0.25), "reset clears ramp and keeps zero");
     /* This target can collide with another arm segment. It is not promised
      * to converge, but must not disable contacts, exceed limits, or go NaN. */
-    const double blocked_pose[6] = {20, 25, -15, 15, 10, -10};
+    const double blocked_pose[6] = {0, -60, 0, 0, 0, 0};
+    saw_contact = 0;
     ctrl_set_pose_deg(blocked_pose);
     CHECK(advance(3.0), "contact-blocked target remains finite and torque limited");
     CHECK(!(m->opt.disableflags & mjDSBL_CONTACT), "pose mode preserves contacts");
+    CHECK(saw_contact, "unreachable downward posture encounters the base/floor");
+    const int flags[] = {mjDSBL_DAMPER, mjDSBL_EULERDAMP};
+    for (int i = 0; i < 2; ++i) {
+        int original = m->opt.disableflags;
+        m->opt.disableflags |= flags[i];
+        sim_reset();
+        ctrl_zero_targets();
+        ctrl_set_pose_deg(pose);
+        CHECK(advance(4.0), "damping option finite/limited");
+        CHECK(settled("damping option", 0.5), "Euler compensation follows damping option");
+        m->opt.disableflags = original;
+    }
     for (int i = 0; i < mjNWARNING; ++i) CHECK(d->warning[i].number == 0, "no MuJoCo warning");
     printf("controller_pose: %s\n", ok ? "ok" : "FAILED");
     sim_unload();

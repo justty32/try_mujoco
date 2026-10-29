@@ -34,6 +34,14 @@ add_executable(controller_pose_test
     src/sim.c
     src/controller.c
 )
+add_executable(arm_geometry_test tests/arm_geometry_test.c)
+target_include_directories(arm_geometry_test PRIVATE "${MUJOCO_DIR}/include")
+target_link_libraries(arm_geometry_test PRIVATE "${MUJOCO_DIR}/lib/mujoco.lib")
+add_custom_command(TARGET arm_geometry_test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${MUJOCO_DIR}/bin/mujoco.dll"
+        "$<TARGET_FILE_DIR:arm_geometry_test>/mujoco.dll"
+)
 target_include_directories(controller_pose_test PRIVATE src "${MUJOCO_DIR}/include")
 target_link_libraries(controller_pose_test PRIVATE "${MUJOCO_DIR}/lib/mujoco.lib")
 add_custom_command(TARGET controller_pose_test POST_BUILD
@@ -81,4 +89,8 @@ add_test(
 add_test(
     NAME controller_pose
     COMMAND controller_pose_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
+)
+add_test(
+    NAME arm_geometry
+    COMMAND arm_geometry_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
 )
