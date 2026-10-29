@@ -2,6 +2,8 @@
 
 評估日期：2026-08-10
 
+> 正式模型更新（2026-10-29）：使用者已核准典型 9 圓柱 6R 外形與 home 姿態，現行入口為 [`assets/six_axis_arm.xml`](../assets/six_axis_arm.xml)；操作見 [README](../README.md)。下方七圓柱／叉耳模型的補註與評估均保留為歷史，已被本次 6R 模型取代，不能當成現行座標、質量、馬達額定或驗收結果。robot_core 大型計畫仍未開始。
+
 > 現況補註（2026-10-29）：互動 viewer 已加入具名關節目標、姿態保持與 headless 控制測試，操作見 [README](../README.md#操作說明)。下文是原評估基線；其中「沒有 position mode」已由本次互動關節控制補上，但尚無通用 action schema、instance-based core 或批次訓練 API，robot_core 計畫仍未開始。
 
 > 幾何補註（2026-10-29）：同一歷史檔名 `seven_cylinders.xml` 已換成六關節叉耳式模型，保留關節中心／軸／範圍與末端位置，補出轉盤、叉耳與轉軸的裝配間隙。原粗圓柱模型與本輪取樣／真實渲染均保存在 [幾何驗證紀錄](reports/geometry-2026-10-29/README.md)，可直接開 [比較頁](reports/geometry-2026-10-29/preview.html)。新模型以 1000 kg/m³ 的教學密度計算質量與慣量，仍非硬體校準；`pitch1 = -60°` 仍有真實基座／地面碰撞。下方「seven-cylinder 修正」保留為當時的歷史紀錄，不能視為現行外形或全姿態無碰撞證明。
@@ -21,8 +23,8 @@
 - `sim`、`controller`、`viewer` 已拆成不同原始碼檔，方向正確。[src/](../src/)
 - 使用 MuJoCo 原生 C API，沒有多繞一層 Python；對自訂 C 演算法是優勢。
 - 物理 timestep 是 2 ms，viewer 以約 60 Hz 顯示；物理頻率與顯示頻率已有概念上的分離。[main.c](../src/main.c)
-- 模型與控制器都有具名 joint/actuator，七段模型現在有可驗證的 end-effector site。[seven_cylinders.xml](../assets/seven_cylinders.xml)
-- 本次已加入第一個 headless 模型測試；它會用真正的 MuJoCo loader 檢查拓撲與零姿態座標。[seven_cylinders_test.c](../tests/seven_cylinders_test.c)
+- 模型與控制器都有具名 joint/actuator，七段模型現在有可驗證的 end-effector site。[seven_cylinders.xml](reports/geometry-2026-10-29/after.xml)
+- 本次已加入第一個 headless 模型測試；它會用真正的 MuJoCo loader 檢查拓撲與零姿態座標。`seven_cylinders_test.c`（歷史檔名；現行測試入口為 [six_axis_arm_test.c](../tests/six_axis_arm_test.c)）
 
 ### 阻止大量訓練的主要缺口
 

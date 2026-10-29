@@ -2,7 +2,9 @@
 
 狀態：**Proposed，尚未開始實作**
 
-基準：目前 `main.c + sim.c + controller.c + viewer.c`、MuJoCo 3.10.0、七圓柱 6-DoF 模型
+> 現況補註（2026-10-29）：互動程式已接入使用者核准的 [`six_axis_arm.xml`](../../../assets/six_axis_arm.xml)，以 J1–J6 與 home `[0, 65, -100, 0, 35, 0]°` 操作。這不代表本計畫的 robot_core／headless／batch／record/replay 已實作。下方七圓柱與 `seven_reach_v1` 為原計畫基線；日後啟動里程碑時須重新對齊現行模型名稱與 task 契約。
+
+原計畫基準（歷史）：`main.c + sim.c + controller.c + viewer.c`、MuJoCo 3.10.0、七圓柱 6-DoF 模型
 
 目標：把現有單一互動程式演進成可由自訂 C 演算法呼叫、可大量 headless rollout、可選擇性紀錄與重播的模擬環境。
 

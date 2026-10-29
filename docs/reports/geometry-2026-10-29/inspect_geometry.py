@@ -113,7 +113,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--render', action='store_true')
     args = parser.parse_args()
-    paths = {'before': HERE / 'before.xml', 'after': ROOT / 'assets/seven_cylinders.xml'}
+    paths = {'before': HERE / 'before.xml', 'after': HERE / 'after.xml'}
     report = {'mujoco_version': mujoco.__version__, 'distance_tolerance_m': 1e-6,
               'method': 'instantaneous forward kinematics, no simulation steps',
               'models': {name: inspect(path) for name, path in paths.items()}}

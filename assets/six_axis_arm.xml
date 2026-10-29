@@ -1,0 +1,65 @@
+<mujoco model="six_axis_arm">
+  <compiler angle="degree"/>
+  <option timestep="0.002"/>
+  <visual>
+    <global offwidth="800" offheight="600"/>
+    <quality shadowsize="1024"/>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.7 0.7 0.7"/>
+    <rgba haze="0.92 0.94 0.97 1"/>
+  </visual>
+  <default>
+    <geom type="cylinder" density="1000" rgba="0.93 0.52 0.13 1"/>
+    <joint type="hinge" limited="true" damping="0.1"/>
+    <motor ctrllimited="true" ctrlrange="-1 1"/>
+  </default>
+  <worldbody>
+    <light pos="0.3 -0.4 2" dir="0 0 -1"/>
+    <geom name="floor" type="plane" size="2 2 .05" rgba="0.91 0.93 0.95 1"/>
+    <!-- Approved nine-cylinder teaching model. Density, damping, and motor
+         ratings are explicit prototype assumptions, not calibrated hardware.
+         No contact exclusions: adjacent primitives represent simplified joints. -->
+    <body name="base" pos="0 0 .10">
+      <geom name="base_pedestal" size=".11 .10" rgba="0.23 0.28 0.34 1"/>
+      <body name="waist" pos="0 0 .10">
+        <joint name="J1_base_yaw" axis="0 0 1" range="-180 180"/>
+        <geom name="waist_cylinder" pos="0 0 .035" size=".085 .035"/>
+        <body name="shoulder" pos="0 0 .12">
+          <joint name="J2_shoulder_pitch" axis="0 -1 0" range="-100 130"/>
+          <geom name="shoulder_cylinder" fromto="0 -.07 0 0 .07 0" size=".055" rgba="0.23 0.28 0.34 1"/>
+          <geom name="upper_arm" fromto="0 0 0 .30 0 0" size=".035"/>
+          <body name="elbow" pos=".30 0 0">
+            <joint name="J3_elbow_pitch" axis="0 -1 0" range="-145 145"/>
+            <geom name="elbow_cylinder" fromto="0 -.055 0 0 .055 0" size=".045" rgba="0.23 0.28 0.34 1"/>
+            <geom name="forearm" fromto="0 0 0 .27 0 0" size=".029"/>
+            <body name="wrist_roll" pos=".27 0 0">
+              <joint name="J4_wrist_roll" axis="1 0 0" range="-180 180"/>
+              <geom name="wrist_roll_cylinder" fromto="0 0 0 .04 0 0" size=".032" rgba="0.23 0.28 0.34 1"/>
+              <body name="wrist_pitch" pos=".04 0 0">
+                <!-- Fixed wrist casing clearance is 2.37 mm at +/-45 degrees. -->
+                <joint name="J5_wrist_pitch" axis="0 -1 0" range="-45 45"/>
+                <geom name="wrist_pitch_cylinder" fromto="0 -.035 0 0 .035 0" size=".031"/>
+                <body name="tool_roll" pos=".025 0 0">
+                  <joint name="J6_tool_roll" axis="1 0 0" range="-180 180"/>
+                  <geom name="tool_flange" fromto="0 0 0 .035 0 0" size=".028" rgba="0.23 0.28 0.34 1"/>
+                  <site name="tool_center" pos=".035 0 0" size=".003" rgba="0.9 0.1 0.1 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="J1_motor" joint="J1_base_yaw" gear="12"/>
+    <motor name="J2_motor" joint="J2_shoulder_pitch" gear="20"/>
+    <motor name="J3_motor" joint="J3_elbow_pitch" gear="12"/>
+    <motor name="J4_motor" joint="J4_wrist_roll" gear="3"/>
+    <motor name="J5_motor" joint="J5_wrist_pitch" gear="3"/>
+    <motor name="J6_motor" joint="J6_tool_roll" gear="2"/>
+  </actuator>
+  <!-- Keyframe qpos uses radians, independently of compiler angle. -->
+  <keyframe>
+    <key name="home" qpos="0 1.1344640137963142 -1.7453292519943295 0 0.6108652381980153 0"/>
+  </keyframe>
+</mujoco>

@@ -1998,7 +1998,7 @@
       ]
     },
     "after": {
-      "path": "assets/seven_cylinders.xml",
+      "path": "docs/reports/geometry-2026-10-29/after.xml",
       "sha256": "f2db7c31ca1be87dbfe8331923efe6bd776ef93b175ad849002d0d3f424b0dbd",
       "body_mass_kg": [
         0.0,
@@ -2675,7 +2675,8 @@
           "engine_contacts": 0,
           "penetrations": []
         }
-      ]
+      ],
+      "captured_path": "assets/seven_cylinders.xml"
     }
   }
 }

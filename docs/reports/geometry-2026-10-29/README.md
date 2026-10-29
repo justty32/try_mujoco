@@ -1,5 +1,7 @@
 # 六關節手臂外形與裝配間隙修正
 
+> 歷史紀錄：此三組 yaw/pitch 叉耳構型已由使用者核准的典型 6R 圓柱手臂取代；本頁保留當輪證據，修正後模型凍結於 [after.xml](after.xml)，不是現行預設。原始 JSON 中的 assets 路徑是量測當時的位置。
+
 2026-10-29。保留六個關節的中心、軸、角度範圍與末端位置，把粗圓柱外形改成有轉動間隙的叉耳式裝配。先看 [修改前後比較](preview.html)，或回 [操作說明](../../../README.md#操作說明)。
 
 ## 改了什麼
@@ -68,9 +70,9 @@
 ## 可追溯檔案
 
 - [before.xml](before.xml)：修改前模型快照。
-- [目前模型](../../../assets/seven_cylinders.xml)：修改後的現行模型。
+- [after.xml](after.xml)：當輪修改後的舊模型快照，與原始 hash 相同。
 - [geometry_samples.json](geometry_samples.json)：兩份模型 hash、mass／bias 與每個快照的距離／接觸紀錄。
 - [validation.json](validation.json)：建置／CTest 結果、姿態收斂輸出、負向驗證退出碼與原始碼 hash。
 - [inspect_geometry.py](inspect_geometry.py)：取樣與選擇性軟體渲染工具；從 repo root 執行 `python docs/reports/geometry-2026-10-29/inspect_geometry.py` 可重新取樣，需現有 MuJoCo Python 環境。`--render` 另需可用的軟體 OpenGL 環境；它會檢查 renderer 並拒絕未辨識為軟體的 backend。
 
-重跑工具會覆寫這份目錄的生成紀錄；若現行模型已改動，先另存此輪證據再執行。
+重跑工具會覆寫這份目錄的生成紀錄；先另存此輪證據再執行；重跑工具只讀本目錄凍結的 before／after 模型。

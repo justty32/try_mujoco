@@ -18,6 +18,10 @@ static int    btn_right = 0;
 static double lastx     = 0;
 static double lasty     = 0;
 static int    selected_joint = 0;
+static const char *JOINT_LABELS[CTRL_JOINT_COUNT] = {
+    "J1 Base", "J2 Shoulder", "J3 Elbow",
+    "J4 Wrist roll", "J5 Wrist pitch", "J6 Tool roll"
+};
 
 /* ------------------------------------------------------------------ */
 /* Input callbacks                                                      */
@@ -51,9 +55,9 @@ static void cb_key(GLFWwindow *w, int key, int scan, int act, int mods) {
     case GLFW_KEY_ESCAPE:    glfwSetWindowShouldClose(w, GLFW_TRUE); break;
     case GLFW_KEY_SPACE:     paused ^= 1;                            break;
     case GLFW_KEY_BACKSPACE:
-        sim_reset(); ctrl_zero_targets(); ctrl_apply();             break;
+        sim_reset(); ctrl_home_targets(); ctrl_apply();             break;
     case GLFW_KEY_P:         ctrl_hold_current();                   break;
-    case GLFW_KEY_HOME:      ctrl_zero_targets();                   break;
+    case GLFW_KEY_HOME:      ctrl_home_targets();                   break;
     case GLFW_KEY_1:         ctrl_set_phase(1);                      break;
     case GLFW_KEY_2:         ctrl_set_phase(2);                      break;
     case GLFW_KEY_3:         ctrl_set_phase(3);                      break;
@@ -103,11 +107,9 @@ static void build_overlay(char *buf, int bufsz) {
     for (int i = 0; i < CTRL_JOINT_COUNT; ++i) {
         const char *name = ctrl_joint_name(i);
         int count = snprintf(rows + used, sizeof(rows) - (size_t)used,
-            "%c F%d %-6s target %+6.1f  actual %+6.1f deg"
-            "  vel %+6.1f  ctrl %+.2f\n",
-            i == selected_joint ? '>' : ' ', i + 1, name,
-            ctrl_get_target_deg(i), sim_joint_angle_deg(name),
-            sim_joint_vel_deg(name), d->ctrl[i]);
+            "%c F%d %-14s target %+6.1f  actual %+6.1f deg\n",
+            i == selected_joint ? '>' : ' ', i + 1, JOINT_LABELS[i],
+            ctrl_get_target_deg(i), sim_joint_angle_deg(name));
         if (count < 0 || (size_t)count >= sizeof(rows) - (size_t)used) break;
         used += count;
     }
@@ -115,20 +117,23 @@ static void build_overlay(char *buf, int bufsz) {
         "Time: %.2f s%s | %s\n"
         "%s\n"
         "%s"
-        "Selected: %s  target range [%+.0f, %+.0f] deg\n"
-        "\n"
+        "Selected: %s  range [%+.0f, %+.0f] deg\n"
+        "Velocity: %+.1f deg/s  ctrl: %+.2f\n"
+        "%s\n"
         "[F1-F6 / Up Down] select joint\n"
         "[Left Right] target -/+5 deg  [Shift] -/+1 deg\n"
-        "[P] hold current pose  [Home] zero targets\n"
-        "[1] force yaw  [2] force pitch  [3] force reverse\n"
-        "[Space] %-6s  [Bksp] reset  [Esc] quit\n"
+        "[P] hold current pose  [Home] return home\n"
+        "[1] base/roll torque  [2] pitch torque  [3] reverse\n"
+        "[Space] %-6s  [Bksp] reset home  [Esc] quit\n"
         "Drag: left=rotate  right=pan  scroll=zoom",
         d->time, paused ? "  PAUSED" : "",
         pose ? "POSE HOLD" : "FORCE PRESET (targets inactive)",
-        pose ? "Target ramp: 30 deg/s | motor limits: +/-10 / 9 / 8 Nm"
-             : "Original motor limits | press P to hold current pose",
-        rows, ctrl_joint_name(selected_joint),
+        pose ? "Target ramp: 30 deg/s | normalized motor ctrl: [-1, 1]"
+             : "Torque mode | press P to hold current pose",
+        rows, JOINT_LABELS[selected_joint],
         ctrl_get_min_deg(selected_joint), ctrl_get_max_deg(selected_joint),
+        sim_joint_vel_deg(ctrl_joint_name(selected_joint)), d->ctrl[selected_joint],
+        selected_joint == 5 ? "J6 round tool may look unchanged; watch actual angle." : "",
         paused ? "resume" : "pause"
     );
 }
@@ -161,12 +166,12 @@ int viewer_init(int width, int height, const char *title) {
     mjv_makeScene(sim_model(), &scn, 2000);
     mjr_makeContext(sim_model(), &con, mjFONTSCALE_150);
 
-    cam.lookat[0] = 0.0;
+    cam.lookat[0] = 0.19;
     cam.lookat[1] = 0.0;
-    cam.lookat[2] = 0.4;
-    cam.distance  = 2.0;
-    cam.azimuth   = 135.0;
-    cam.elevation = -20.0;
+    cam.lookat[2] = 0.32;
+    cam.distance  = 1.12;
+    cam.azimuth   = 105.0;
+    cam.elevation = -14.0;
     return 1;
 }
 

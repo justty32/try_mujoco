@@ -15,7 +15,7 @@ robot 是以 C11 封裝 MuJoCo、用於機器手臂物理模擬與演算法實�
 | `CMakeLists.txt` | MuJoCo、GLFW、OpenGL 的建置設定 |
 | `build.bat` | Windows/MinGW 建置入口 |
 | `run.bat` | 固定正確工作目錄後啟動互動 viewer |
-| `tests/` | MuJoCo 模型、叉耳裝配／幾何間隙與關節姿態控制 headless 驗證 |
+| `tests/` | 六軸圓柱模型、核准外形／幾何間隙與關節姿態控制 headless 驗證 |
 | `wf/` | 非侵入式工作流、導航與 open 狀態 |
 
 ## 工作流與共通知識

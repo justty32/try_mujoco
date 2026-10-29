@@ -49,25 +49,33 @@ int main(int argc, char **argv) {
     int ok = 1;
     mjModel *m = sim_model();
     mjData *d = sim_data();
-    int shoulder = mj_name2id(m, mjOBJ_ACTUATOR, "pitch1_motor");
+    const double home[6] = {0,65,-100,0,35,0};
+    for (int i=0; i<6; ++i) CHECK(fabs(sim_joint_angle_deg(ctrl_joint_name(i))-home[i])<1e-10, "startup uses radian home key");
+    int shoulder = mj_name2id(m, mjOBJ_ACTUATOR, "J2_motor");
     CHECK(ctrl_get_mode() == CTRL_MODE_POSE, "startup pose mode");
     CHECK(m->actuator_ctrlrange[2*shoulder+1] == 1, "pose preserves original shoulder capacity");
     CHECK(advance(3.0), "startup finite/limited");
-    CHECK(settled("horizontal hold", 0.25), "horizontal posture resists gravity");
+    CHECK(settled("home hold", 0.25), "home posture resists gravity");
 
-    const double pose[6] = {20, 25, -15, 15, 10, 20};
+    ctrl_set_target_deg(4,45);
+    CHECK(advance(3.0), "wrist upper travel finite/limited");
+    CHECK(settled("wrist +45",0.5), "wrist reaches usable travel boundary");
+    ctrl_home_targets();
+    CHECK(advance(3.0), "home after wrist finite/limited");
+
+    const double pose[6] = {20, 50, -85, 25, 25, -40};
     CHECK(ctrl_set_pose_deg(pose) == 0, "set six-joint pose");
     CHECK(advance(0.1), "first ramp segment finite");
     for (int i = 0; i < 6; ++i)
-        CHECK(fabs(sim_joint_angle_deg(ctrl_joint_name(i))) < 5.0, "target change does not teleport joint");
+        CHECK(fabs(sim_joint_angle_deg(ctrl_joint_name(i))-home[i]) < 5.0, "target change does not teleport joint");
     CHECK(advance(6.0), "combined target finite/limited");
     CHECK(settled("combined target", 0.5), "combined target converges");
     CHECK(advance(3.0), "continued hold finite/limited");
     CHECK(settled("continued hold", 0.5), "combined target stays held");
-    const double second_pose[6] = {-25, 40, 20, 10, -15, 15};
+    const double second_pose[6] = {-25, 80, -110, -30, 20, 60};
     ctrl_set_pose_deg(second_pose);
     CHECK(advance(6.0), "second pose finite/limited");
-    CHECK(settled("second target", 0.5), "different yaw/pitch target converges");
+    CHECK(settled("second target", 0.5), "different shoulder/elbow/wrist target converges");
 
     double before[6];
     for (int i = 0; i < 6; ++i) before[i] = ctrl_get_target_deg(i);
@@ -86,16 +94,16 @@ int main(int argc, char **argv) {
     ctrl_set_pose_deg(before);
 
     const double phases[3][6] = {
-        {1,0,1,0,1,0}, {0,.5,0,.5,0,.5}, {-.8,-.3,-.8,-.3,-.8,-.3}
+        {.25,0,0,.10,0,.10}, {0,.35,.25,0,.10,0}, {-.20,-.25,-.20,-.10,-.10,-.10}
     };
     for (int p = 1; p <= 3; ++p) {
         ctrl_set_phase(p);
         ctrl_apply();
         CHECK(ctrl_get_mode() == CTRL_MODE_PHASE, "legacy mode selected");
         for (int i = 0; i < 6; ++i) {
-            CHECK(fabs(d->ctrl[i] - phases[p-1][i]) < 1e-12, "legacy torque preset unchanged");
+            CHECK(fabs(d->ctrl[i] - phases[p-1][i]) < 1e-12, "new mechanism torque preset mapping");
             CHECK(m->actuator_ctrlrange[2*i] == -1 && m->actuator_ctrlrange[2*i+1] == 1,
-                  "legacy motor limits restored");
+                  "motor limits consistent across modes");
         }
     }
     ctrl_set_phase(1);
@@ -110,19 +118,27 @@ int main(int argc, char **argv) {
 
     ctrl_zero_targets();
     CHECK(advance(10.0), "zero target finite/limited");
-    CHECK(settled("return to zero", 0.5), "Home returns without teleporting");
+    CHECK(settled("return to zero", 0.5), "explicit zero API converges");
+    double home_time=d->time, home_q=d->qpos[1];
+    ctrl_home_targets();
+    CHECK(d->time==home_time && d->qpos[1]==home_q, "Home does not reset time or teleport");
+    CHECK(advance(7.0), "Home finite/limited");
+    CHECK(settled("return home",0.5), "Home converges");
+    for (int i=0;i<6;++i) CHECK(fabs(ctrl_get_target_deg(i)-home[i])<1e-10,"Home key targets");
     ctrl_set_pose_deg(pose);
     CHECK(advance(1.0), "move before reset");
     sim_reset();
-    ctrl_zero_targets();
+    ctrl_home_targets();
+    CHECK(d->time==0, "reset clears simulation time");
+    for (int i=0;i<6;++i) CHECK(fabs(sim_joint_angle_deg(ctrl_joint_name(i))-home[i])<1e-10,"reset returns home");
     CHECK(advance(2.0), "reset finite/limited");
-    CHECK(settled("reset hold", 0.25), "reset clears ramp and keeps zero");
+    CHECK(settled("reset hold", 0.25), "reset clears ramp and keeps home");
     /* This target can collide with another arm segment. It is not promised
      * to converge, but must not disable contacts, exceed limits, or go NaN. */
     const double blocked_pose[6] = {0, -60, 0, 0, 0, 0};
     saw_contact = 0;
     ctrl_set_pose_deg(blocked_pose);
-    CHECK(advance(3.0), "contact-blocked target remains finite and torque limited");
+    CHECK(advance(8.0), "contact-blocked target remains finite and torque limited");
     CHECK(!(m->opt.disableflags & mjDSBL_CONTACT), "pose mode preserves contacts");
     CHECK(saw_contact, "unreachable downward posture encounters the base/floor");
     const int flags[] = {mjDSBL_DAMPER, mjDSBL_EULERDAMP};
@@ -130,7 +146,7 @@ int main(int argc, char **argv) {
         int original = m->opt.disableflags;
         m->opt.disableflags |= flags[i];
         sim_reset();
-        ctrl_zero_targets();
+        ctrl_home_targets();
         ctrl_set_pose_deg(pose);
         CHECK(advance(4.0), "damping option finite/limited");
         CHECK(settled("damping option", 0.5), "Euler compensation follows damping option");

@@ -2,7 +2,7 @@
 #include "controller.h"
 #include "viewer.h"
 
-#define MODEL_PATH    "assets/seven_cylinders.xml"
+#define MODEL_PATH    "assets/six_axis_arm.xml"
 #define SIM_PER_FRAME (1.0 / 60.0)
 
 int main(void) {

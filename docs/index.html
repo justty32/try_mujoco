@@ -210,9 +210,9 @@ tr:hover td { background: var(--bg); }
 <section id="overview">
   <h1>robot</h1>
   <p style="color:var(--muted); margin-bottom:1.5rem;">
-    MuJoCo C 專案 · 六關節叉耳式手臂 · 調整關節目標角並保持姿態，或切回原定力矩示範
+    MuJoCo C 專案 · 9 圓柱 6R 手臂 · 調整關節目標角並保持姿態，或切換定力矩示範
   </p>
-  <p><strong>先試：</strong>開啟後是 <code>POSE HOLD</code>。按 <kbd>F2</kbd> 選 pitch1，再按三次 <kbd>→</kbd>，目標變為 +15°；<kbd>Home</kbd> 讓目標回零。完整按鍵見 <a href="#viewer">viewer</a>。</p>
+  <p><strong>先試：</strong>開啟後是 <code>POSE HOLD</code>。按 <kbd>F1</kbd> 選 J1 Base，再按兩次 <kbd>→</kbd>，目標變為 +10°；<kbd>Home</kbd> 讓目標回到核准的 home。完整按鍵見 <a href="#viewer">viewer</a>。</p>
 
   <h2>架構</h2>
   <p>四個模組，單向依賴，<code>sim</code> 在最底層，<code>main</code> 在最頂層。</p>
@@ -230,19 +230,21 @@ tr:hover td { background: var(--bg); }
     </p>
   </div>
 
-  <h2>模型結構（沿用 seven_cylinders.xml 檔名）</h2>
-  <p>外形由固定 yaw 座、薄轉盤、叉耳、pitch 轉軸／輪轂與半徑 10 mm 的細連桿組成；下表的 body 名稱、關節中心、軸與範圍沿用原模型。看 <a href="reports/geometry-2026-10-29/preview.html">修改前後真實渲染比較</a>。</p>
-  <p>實體也作為碰撞幾何，未關閉碰撞；以 1000 kg/m³ 的教學密度由 MuJoCo 計算質量與慣量，尚非硬體校準資料。有限取樣不能保證所有姿態無碰撞，pitch1 = −60°、其餘為零時仍碰基座與地面。</p>
+  <h2>正式模型：assets/six_axis_arm.xml</h2>
+  <p>使用者核准的 9 圓柱 6R 外形：底座 yaw、肩／肘 pitch，接緊湊手腕 roll／pitch／roll。比例、外形與軸沿用 <a href="designs/six_axis_arm/prototype-v1/preview.png">核准原型圖</a>；原型 XML、PNG 與拍攝 metadata 保留在 <a href="designs/six_axis_arm/prototype-v1/README.md">原型目錄</a>。</p>
+  <p>home 為 <code>[0, 65, -100, 0, 35, 0]°</code>，不是全零姿態；正式 XML 的 keyframe qpos 使用弧度。固定 body 為 <code>base</code>，末端 site 為 <code>tool_center</code>。下表旋轉軸是各關節的局部軸，不能當成任意姿態下的世界座標軸。</p>
   <table>
-    <tr><th>Body</th><th>Joint</th><th>Actuator</th><th>範圍</th></tr>
-    <tr><td class="mono">base_cylinder</td><td>—（固定在世界）</td><td>—</td><td>—</td></tr>
-    <tr><td class="mono">disc1</td><td class="mono">yaw1（繞 Z）</td><td class="mono">yaw1_motor [0]</td><td>±90°</td></tr>
-    <tr><td class="mono">arm1</td><td class="mono">pitch1（繞 −Y）</td><td class="mono">pitch1_motor [1]</td><td>±60°</td></tr>
-    <tr><td class="mono">disc2</td><td class="mono">yaw2（繞 Z）</td><td class="mono">yaw2_motor [2]</td><td>±90°</td></tr>
-    <tr><td class="mono">arm2</td><td class="mono">pitch2（繞 −Y）</td><td class="mono">pitch2_motor [3]</td><td>±60°</td></tr>
-    <tr><td class="mono">disc3</td><td class="mono">yaw3（繞 Z）</td><td class="mono">yaw3_motor [4]</td><td>±90°</td></tr>
-    <tr><td class="mono">arm3</td><td class="mono">pitch3（繞 −Y）</td><td class="mono">pitch3_motor [5]</td><td>±60°</td></tr>
+    <tr><th>Body</th><th>Joint（索引依序 0–5）</th><th>局部軸</th><th>角度範圍</th><th>home</th></tr>
+    <tr><td class="mono">waist</td><td class="mono">J1_base_yaw</td><td>Z</td><td>−180°～180°</td><td>0°</td></tr>
+    <tr><td class="mono">shoulder</td><td class="mono">J2_shoulder_pitch</td><td>−Y</td><td>−100°～130°</td><td>65°</td></tr>
+    <tr><td class="mono">elbow</td><td class="mono">J3_elbow_pitch</td><td>−Y</td><td>−145°～145°</td><td>-100°</td></tr>
+    <tr><td class="mono">wrist_roll</td><td class="mono">J4_wrist_roll</td><td>X</td><td>−180°～180°</td><td>0°</td></tr>
+    <tr><td class="mono">wrist_pitch</td><td class="mono">J5_wrist_pitch</td><td>−Y</td><td>−45°～45°</td><td>35°</td></tr>
+    <tr><td class="mono">tool_roll</td><td class="mono">J6_tool_roll</td><td>X</td><td>−180°～180°</td><td>0°</td></tr>
   </table>
+  <p>密度 1000 kg/m³、joint damping 0.1 為教學原型參數，尚非硬體校準。真實碰撞保留；關節限位與有限取樣都不能保證全部組合／路徑無碰撞。</p>
+  <p>J5 正式限位收為 ±45°，腕部在此邊界約有 2.373 mm 間隙；±50° 僅約 0.487 mm，±52° 開始相交。只調整操作限位，home 35°、原型的比例、外形與旋轉軸不變。見 <a href="reports/six-axis-integration-2026-10-29/README.md">正式接入驗證</a>／<a href="reports/six-axis-integration-2026-10-29/preview.png">正式模型預覽</a>。</p>
+  <p>J6 工具法蘭為旋轉對稱圓柱，roll 時外形與末端位置可能看起來不變；請用 HUD 的 actual 角度判斷是否旋轉。末端方向與末端位置是不同量。</p>
 </section>
 
 <!-- QUICK REF -->
@@ -289,13 +291,13 @@ tr:hover td { background: var(--bg); }
 
     <tr><td class="mono">ctrl_init()</td>
         <td><span class="dot d-c"></span>ctrl</td><td>—</td>
-        <td>初始化，保持目前角度（預設零姿態）</td></tr>
+        <td>初始化，保持載入後的 home 姿態</td></tr>
     <tr><td class="mono">ctrl_set_target_deg(i, deg) / ctrl_set_pose_deg(pose)</td>
         <td><span class="dot d-c"></span>ctrl</td><td>Motor Control</td>
         <td>設定一個／六個關節目標角（度），受 joint limit 約束</td></tr>
-    <tr><td class="mono">ctrl_hold_current() / ctrl_zero_targets()</td>
+    <tr><td class="mono">ctrl_hold_current() / ctrl_home_targets()</td>
         <td><span class="dot d-c"></span>ctrl</td><td>Motor Control</td>
-        <td>捕捉當前角度／讓目標回零</td></tr>
+        <td>捕捉當前角度／平順回到 home</td></tr>
     <tr style="background:#fef2f222">
         <td class="mono">ctrl_set_phase(p)</td>
         <td><span class="dot d-c"></span>ctrl</td>
@@ -365,8 +367,8 @@ tr:hover td { background: var(--bg); }
       <span class="fn-sig"><span class="ret">void</span> <span class="fname">sim_reset</span>()</span>
     </div>
     <div class="fn-body">
-      <p>重置為 XML 定義的初始狀態（qpos = 初始值，qvel = 0，time = 0），並執行 forward kinematics。</p>
-      <p>Viewer 的 <kbd>Backspace</kbd> 會呼叫此函數，接著呼叫 <code>ctrl_zero_targets()</code> 與 <code>ctrl_apply()</code>，回到零目標姿態模式。暫停狀態保持不變。</p>
+      <p>優先載入 XML 的 <code>home</code> keyframe，沒有 home 才使用模型預設 reset；再執行 forward kinematics。正式模型以六個 home 角度開始，速度與時間歸零。</p>
+      <p>Viewer 的 <kbd>Backspace</kbd> 會呼叫此函數，接著呼叫 <code>ctrl_home_targets()</code> 與 <code>ctrl_apply()</code>，回到 home 姿態模式。暫停狀態保持不變。</p>
     </div>
   </div>
 
@@ -406,11 +408,7 @@ tr:hover td { background: var(--bg); }
     </div>
     <div class="fn-body">
       <p>以名稱查詢關節的當前角度（度）或角速度（度/s）。</p>
-      <table>
-        <tr><th>name</th><th>對應 body</th><th>旋轉軸</th><th>範圍</th></tr>
-        <tr><td class="mono">"yaw1" / "yaw2" / "yaw3"</td><td>disc1 / disc2 / disc3</td><td>Z 軸</td><td>±90°</td></tr>
-        <tr><td class="mono">"pitch1" / "pitch2" / "pitch3"</td><td>arm1 / arm2 / arm3</td><td>−Y 軸（正角度抬升）</td><td>±60°</td></tr>
-      </table>
+      <p>具名查詢使用上方模型表中的完整名稱，例如 <code>J2_shoulder_pitch</code>；HUD 使用短名，API 不接受 <code>J2 Shoulder</code> 當名稱。</p>
       <div class="returns"><strong>Returns：</strong>找不到名稱時回傳 0.0。</div>
     </div>
   </div>
@@ -425,18 +423,12 @@ tr:hover td { background: var(--bg); }
     </div>
     <div class="fn-body">
       <p>將 <code>name</code> 對應 body 的世界座標（x, y, z，單位 m）填入 <code>pos[3]</code>。</p>
-      <table>
-        <tr><th>Body</th><th>初始位置（世界座標）</th><th>說明</th></tr>
-        <tr><td class="mono">"base_cylinder"</td><td>(0, 0, 0.10)</td><td>固定底座中心</td></tr>
-        <tr><td class="mono">"disc1" / "arm1"</td><td>(0, 0, 0.20) / (0, 0, 0.30)</td><td>第一組 yaw / pitch</td></tr>
-        <tr><td class="mono">"disc2" / "arm2"</td><td>(0.20, 0, 0.30) / (0.20, 0, 0.39)</td><td>第二組 yaw / pitch</td></tr>
-        <tr><td class="mono">"disc3" / "arm3"</td><td>(0.38, 0, 0.39) / (0.38, 0, 0.47)</td><td>第三組 yaw / pitch</td></tr>
-      </table>
+      <p>可查詢 <code>base</code>、<code>waist</code>、<code>shoulder</code>、<code>elbow</code>、<code>wrist_roll</code>、<code>wrist_pitch</code>、<code>tool_roll</code>。座標依目前姿態變化；<code>tool_roll</code> 是 body 原點，與末端 <code>tool_center</code> site 不同。</p>
       <div class="returns"><strong>Returns：</strong>0 成功，−1 找不到 body。</div>
       <pre style="margin-top:0.5rem">/* 使用範例 */
 double pos[3];
-if (sim_body_pos("arm3", pos) == 0)
-    printf("tip: %.3f %.3f %.3f\n", pos[0], pos[1], pos[2]);</pre>
+if (sim_body_pos("tool_roll", pos) == 0)
+    printf("tool body: %.3f %.3f %.3f\n", pos[0], pos[1], pos[2]);</pre>
     </div>
   </div>
 
@@ -451,14 +443,15 @@ if (sim_body_pos("arm3", pos) == 0)
     <div class="fn-body">
       <p>回傳 MuJoCo 的 actuator 純量輸出，尚未乘上 gear。此模型是一個 hinge joint 對應一個 motor，關節力矩為此值乘上對應 gear（N·m）。</p>
       <table>
-        <tr><th>index</th><th>Actuator</th><th>gear</th><th>說明</th></tr>
-        <tr><td class="mono">0</td><td>yaw1_motor</td><td>10</td><td>yaw1 關節力矩</td></tr>
-        <tr><td class="mono">1</td><td>pitch1_motor</td><td>10</td><td>pitch1 關節力矩</td></tr>
-        <tr><td class="mono">2</td><td>yaw2_motor</td><td>9</td><td>yaw2 關節力矩</td></tr>
-        <tr><td class="mono">3</td><td>pitch2_motor</td><td>9</td><td>pitch2 關節力矩</td></tr>
-        <tr><td class="mono">4</td><td>yaw3_motor</td><td>8</td><td>yaw3 關節力矩</td></tr>
-        <tr><td class="mono">5</td><td>pitch3_motor</td><td>8</td><td>pitch3 關節力矩</td></tr>
+        <tr><th>index / motor</th><th>對應關節</th><th>gear</th><th>ctrl ±1 的力矩額定</th></tr>
+        <tr><td>0 / J1_motor</td><td class="mono">J1_base_yaw</td><td>12</td><td>±12 N·m</td></tr>
+        <tr><td>1 / J2_motor</td><td class="mono">J2_shoulder_pitch</td><td>20</td><td>±20 N·m</td></tr>
+        <tr><td>2 / J3_motor</td><td class="mono">J3_elbow_pitch</td><td>12</td><td>±12 N·m</td></tr>
+        <tr><td>3 / J4_motor</td><td class="mono">J4_wrist_roll</td><td>3</td><td>±3 N·m</td></tr>
+        <tr><td>4 / J5_motor</td><td class="mono">J5_wrist_pitch</td><td>3</td><td>±3 N·m</td></tr>
+        <tr><td>5 / J6_motor</td><td class="mono">J6_tool_roll</td><td>2</td><td>±2 N·m</td></tr>
       </table>
+      <p>此額定只用於目前教學模擬，不代表任何真實馬達的規格。</p>
       <div class="note">
         <strong>注意：</strong>值來自 <code>d→actuator_force[index]</code>，不含接觸／關節限位的約束力。姿態保持時必須抵抗重力，因此即使靜止也可有非零輸出。
       </div>
@@ -470,15 +463,16 @@ if (sim_body_pos("arm3", pos) == 0)
 <!-- ===== CONTROLLER ===== -->
 <section id="controller">
   <h2><span class="mod-badge b-ctrl">controller</span>controller.h / controller.c</h2>
-  <p>預設以關節目標角控制並保持姿態；也可切回原本的定力矩 phase。每個物理步由 <code>ctrl_apply()</code> 寫入 <code>d→ctrl[]</code>。</p>
+  <p>預設以關節目標角控制並保持姿態；也可切回定力矩 phase。每個物理步由 <code>ctrl_apply()</code> 寫入 <code>d→ctrl[]</code>。</p>
   <p>這是關節角控制，不是末端位置／姿態的反向運動學。目標有限位、內部目標以最多 30°/s 移動，輸出有力矩限幅；碰撞阻擋的姿勢不保證可達。</p>
 
   <h3>Phase Preset 對照</h3>
+  <p>數值是正常化控制輸入，按 J1–J6 排列，所有模式均限制在 ±1。這些是力矩示範，不會自動到達指定角度。</p>
   <table>
-    <tr><th>Phase</th><th>yaw1 / yaw2 / yaw3</th><th>pitch1 / pitch2 / pitch3</th><th>效果</th></tr>
-    <tr><td>1</td><td>+1.0</td><td>0.0</td><td>三個 Yaw 正向</td></tr>
-    <tr><td>2</td><td>0.0</td><td>+0.5</td><td>三個 Pitch 正向抬升</td></tr>
-    <tr><td>3</td><td>−0.8</td><td>−0.3</td><td>六個關節反向</td></tr>
+    <tr><th>Phase</th><th>J1, J2, J3, J4, J5, J6</th><th>作用</th></tr>
+    <tr><td>1</td><td class="mono">[0.25, 0, 0, 0.10, 0, 0.10]</td><td>底座／roll：J1、J4、J6</td></tr>
+    <tr><td>2</td><td class="mono">[0, 0.35, 0.25, 0, 0.10, 0]</td><td>pitch：J2、J3、J5</td></tr>
+    <tr><td>3</td><td class="mono">[-0.20, -0.25, -0.20, -0.10, -0.10, -0.10]</td><td>全部反向</td></tr>
   </table>
 
   <div class="fn-card" id="ctrl_init">
@@ -486,7 +480,7 @@ if (sim_body_pos("arm3", pos) == 0)
       <span class="fn-sig"><span class="ret">void</span> <span class="fname">ctrl_init</span>()</span>
     </div>
     <div class="fn-body">
-      <p>在 <code>sim_load()</code> 之後、主迴圈之前初始化具名關節與馬達，捕捉載入後的目前角度並進入姿態模式（預設模型為六個零角度）。原 phase 編號預設為 1，但只有切換到 phase 模式後才套用。</p>
+      <p>在 <code>sim_load()</code> 之後、主迴圈之前初始化具名關節與馬達，捕捉載入後的目前角度並進入姿態模式（正式模型為 home）。phase 編號預設為 1，但只有切換到 phase 模式後才套用。</p>
     </div>
   </div>
 
@@ -499,7 +493,7 @@ if (sim_body_pos("arm3", pos) == 0)
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p><code>ctrl_set_phase</code>：切換到定力矩 preset（1–3），超出範圍忽略；下一次 <code>ctrl_apply()</code> 寫入原 preset 值。所有模式均使用模型的 ±1 控制範圍，此模式不追蹤角度目標。</p>
+      <p><code>ctrl_set_phase</code>：切換到定力矩 preset（1–3），超出範圍忽略；下一次 <code>ctrl_apply()</code> 寫入目前 preset 值。所有模式均使用模型的 ±1 控制範圍，此模式不追蹤角度目標。</p>
       <p><code>ctrl_get_phase</code>：回傳最近選擇的 phase 號碼；用 <code>ctrl_get_mode()</code> 區分 <code>CTRL_MODE_POSE</code> 與 <code>CTRL_MODE_PHASE</code>。</p>
       <p>Viewer 的 <kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> 鍵直接呼叫 <code>ctrl_set_phase</code>。</p>
     </div>
@@ -511,7 +505,7 @@ if (sim_body_pos("arm3", pos) == 0)
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p>索引 0–5 依序為 yaw1、pitch1、yaw2、pitch2、yaw3、pitch3；名稱可由 <code>ctrl_joint_name(i)</code> 查詢。yaw 範圍為 ±90°，pitch 為 ±60°。兩個設定函數成功回傳 0，無效索引、非有限數值或尚未初始化時回傳 −1。</p>
+      <p>索引 0–5 依序為 J1–J6；完整名稱可由 <code>ctrl_joint_name(i)</code> 查詢，各關節限位見上方模型表。兩個設定函數成功回傳 0，無效索引、非有限數值或尚未初始化時回傳 −1。</p>
       <table>
         <tr><th>函數</th><th>作用</th></tr>
         <tr><td class="mono">ctrl_set_target_deg(i, deg)</td><td>設定單一目標，限制在 joint range 內</td></tr>
@@ -519,14 +513,15 @@ if (sim_body_pos("arm3", pos) == 0)
         <tr><td class="mono">ctrl_get_target_deg(i)</td><td>查詢使用者要求的目標角；不等同當前角度或內部斜坡目標</td></tr>
         <tr><td class="mono">ctrl_get_min_deg(i) / ctrl_get_max_deg(i)</td><td>查詢模型關節限位</td></tr>
         <tr><td class="mono">ctrl_hold_current()</td><td>捕捉目前六個角度並進入姿態保持</td></tr>
-        <tr><td class="mono">ctrl_zero_targets()</td><td>設定六個零目標，平順移向零姿態，不瞬移 qpos</td></tr>
+        <tr><td class="mono">ctrl_home_targets()</td><td>以 XML home keyframe 設定六個目標，平順回 home，不瞬移 qpos</td></tr>
+        <tr><td class="mono">ctrl_zero_targets()</td><td>字面上的六個全零目標；與 home 不同，不代表碰撞安全姿態</td></tr>
       </table>
-      <pre>double pose[6] = {0, 15, 10, 0, 0, 0};
+      <pre>double pose[6] = {10, 65, -100, 0, 35, 0};
 ctrl_set_pose_deg(pose);
 /* 每個物理步仍呼叫 ctrl_apply(); sim_step(); */</pre>
       <p>姿態模式使用質量矩陣縮放的 PD（位置與速度回授），加上偏置／被動力補償：依模型慣量、重力與阻尼把目標加速度轉成馬達力矩，並在 Euler 步進啟用隱式阻尼時作等效慣量修正，不補償接觸力。內部目標斜坡上限為 30°/s，並不是實際關節速度的硬限制；暫停時可先編輯目標，恢復後才移動。</p>
-      <p>本輪三項 headless 測試已通過模型／幾何、零姿態保持、組合目標收斂、持續保持、姿態捕捉、回零／重置與控制邊界檢查；真實模型的軟體渲染圖已核對，互動 GUI 的鍵盤操作尚未實測。見 <a href="reports/geometry-2026-10-29/README.md#建置與動態回歸">驗證紀錄</a>。</p>
-      <div class="note"><strong>目前的力矩能力：</strong>細連桿模型零姿態的 pitch1 約需 1.13 N·m 抵抗重力，原本 10 N·m 上限已足夠。所有模式都用 ±1 控制範圍（各組 gear 10／9／8），不再使用舊粗圓柱模型的姿態模式 ±40 N·m 特例。preset 控制值保留，但新質量與慣量會改變實際運動。</div>
+      <p>正式模型、姿態控制與幾何三項 CTest 全通過（0.48 秒）：包含五個無引擎接觸靜態樣本、追蹤／保持／姿態捕捉、全零／home／reset，以及限位、限幅和真實阻擋時的有限數值。驗證僅限所測樣本，原型圖不替代控制測試；互動 GUI 的鍵盤操作尚未實測。</p>
+      <div class="note"><strong>教學力矩額定：</strong>所有模式均使用 ±1 控制範圍，J1–J6 gear 為 12／20／12／3／3／2。模型密度與慣量尚未以硬體校準，額定餘裕也不保證任意姿態或碰撞路徑可達。</div>
     </div>
   </div>
 
@@ -536,7 +531,7 @@ ctrl_set_pose_deg(pose);
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p>姿態模式計算斜坡目標，以質量矩陣縮放 PD，再加入偏置／被動力補償；最後依 gear 轉成有限幅的馬達控制值。phase 模式寫入原 preset，兩者都寫入 <code>sim_data()→ctrl[]</code>。</p>
+      <p>姿態模式計算斜坡目標，以質量矩陣縮放 PD，再加入偏置／被動力補償；最後依 gear 轉成有限幅的馬達控制值。phase 模式寫入目前 preset，兩者都寫入 <code>sim_data()→ctrl[]</code>。</p>
       <p>在主迴圈中每次 <code>sim_step()</code> <strong>之前</strong>呼叫：</p>
       <pre>while (sim_data()->time - start &lt; SIM_PER_FRAME) {
     ctrl_apply();   /* ← 寫入 ctrl[] */
@@ -553,7 +548,7 @@ ctrl_set_pose_deg(pose);
       <span class="role role-motor">Motor Control</span>
     </div>
     <div class="fn-body">
-      <p>直接將六個值寫入 <code>d→ctrl[0..5]</code>，順序為 yaw1、pitch1、yaw2、pitch2、yaw3、pitch3，不透過 phase 邏輯。</p>
+      <p>直接將六個值寫入 <code>d→ctrl[0..5]</code>，順序為 J1、J2、J3、J4、J5、J6，不透過 phase 邏輯。</p>
       <table><tr><th>參數</th><th>說明</th></tr>
         <tr><td class="mono">ctrl[6]</td><td>六個 motor 的控制輸入；所有模式都受模型的 ±1 控制範圍限制</td></tr>
       </table>
@@ -578,9 +573,9 @@ ctrl_set_pose_deg(pose);
     <tr><td><kbd>F1</kbd>–<kbd>F6</kbd> / <kbd>↑</kbd> / <kbd>↓</kbd></td><td>選擇關節，HUD 的 &gt; 標記目前選擇</td><td>viewer 選擇狀態</td></tr>
     <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>目標 −5° / +5°；按住可重複，Shift 改為 1°</td><td>必要時先 hold current，再 set_target_deg()</td></tr>
     <tr><td><kbd>P</kbd></td><td>捕捉目前姿態並保持</td><td>ctrl_hold_current()</td></tr>
-    <tr><td><kbd>Home</kbd></td><td>六個目標回零，平順移動</td><td>ctrl_zero_targets()</td></tr>
-    <tr><td><kbd>Backspace</kbd></td><td>重置模擬並回零目標；保留暫停狀態</td><td>sim_reset() + ctrl_zero_targets() + ctrl_apply()</td></tr>
-    <tr><td><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></td><td>切回原定力矩 phase，角度目標暫不生效</td><td>ctrl_set_phase()</td></tr>
+    <tr><td><kbd>Home</kbd></td><td>六個目標平順回 home</td><td>ctrl_home_targets()</td></tr>
+    <tr><td><kbd>Backspace</kbd></td><td>重置模擬到 home；保留暫停狀態</td><td>sim_reset() + ctrl_home_targets() + ctrl_apply()</td></tr>
+    <tr><td><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></td><td>底座／roll、pitch、全部反向力矩示範；角度目標暫不生效</td><td>ctrl_set_phase()</td></tr>
   </table>
 
   <h3>滑鼠控制</h3>
@@ -605,7 +600,7 @@ ctrl_set_pose_deg(pose);
         <li>啟用 vsync（<code>glfwSwapInterval(1)</code> → ~60 fps）</li>
         <li>註冊 keyboard / mouse button / mouse move / scroll callback</li>
         <li><code>mjv_makeScene</code> + <code>mjr_makeContext</code>（需要 OpenGL context，<code>glfwMakeContextCurrent</code> 後才可呼叫）</li>
-        <li>設定初始相機：lookat (0, 0, 0.4)、distance 2 m、azimuth 135°、elevation −20°</li>
+        <li>設定核准預覽相機：lookat (0.19, 0, 0.32)、distance 1.12 m、azimuth 105°、elevation −14°</li>
       </ol>
       <div class="note"><strong>前置條件：</strong>必須在 <code>sim_load()</code> 之後呼叫（需要 <code>sim_model()</code>）。</div>
       <div class="returns"><strong>Returns：</strong>1 成功，0 失敗。</div>
@@ -684,16 +679,16 @@ sim_step();</pre>
 
   <h3>擴充：讀取完整狀態</h3>
   <pre>/* 角度與角速度 */
-double yaw   = sim_joint_angle_deg("yaw1");
-double yaw_v = sim_joint_vel_deg("yaw1");
+double yaw   = sim_joint_angle_deg("J1_base_yaw");
+double yaw_v = sim_joint_vel_deg("J1_base_yaw");
 
 /* body 世界座標 */
 double pos[3];
-sim_body_pos("arm3", pos);   /* pos = {x, y, z} */
+sim_body_pos("tool_roll", pos);   /* pos = {x, y, z} */
 
 /* actuator 實際輸出力 */
-double f_yaw   = sim_actuator_force(0);  /* yaw1_motor */
-double f_pitch = sim_actuator_force(1);  /* pitch1_motor */</pre>
+double f_yaw   = sim_actuator_force(0);  /* J1 actuator */
+double f_pitch = sim_actuator_force(1);  /* J2 actuator */</pre>
 </section>
 
 </main>

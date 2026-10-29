@@ -1,0 +1,49 @@
+<mujoco model="six_axis_arm_cylinder_preview">
+  <compiler angle="degree"/>
+  <option timestep="0.002"/>
+  <visual>
+    <global offwidth="800" offheight="600"/>
+    <quality shadowsize="1024"/>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.7 0.7 0.7"/>
+    <rgba haze="0.92 0.94 0.97 1"/>
+  </visual>
+  <default>
+    <geom type="cylinder" density="1000" rgba="0.93 0.52 0.13 1"/>
+    <joint type="hinge" limited="true" damping="0.1"/>
+  </default>
+  <worldbody>
+    <light pos="0.3 -0.4 2" dir="0 0 -1"/>
+    <geom name="floor" type="plane" size="2 2 .05" rgba="0.91 0.93 0.95 1"/>
+    <!-- Nine cylinders, preview only. This is not a validated collision model. -->
+    <body name="base" pos="0 0 .10">
+      <geom name="base_pedestal" size=".11 .10" rgba="0.23 0.28 0.34 1"/>
+      <body name="waist" pos="0 0 .10">
+        <joint name="J1_base_yaw" axis="0 0 1" range="-180 180"/>
+        <geom name="waist_cylinder" pos="0 0 .035" size=".085 .035"/>
+        <body name="shoulder" pos="0 0 .12">
+          <joint name="J2_shoulder_pitch" axis="0 -1 0" range="-100 130"/>
+          <geom name="shoulder_cylinder" fromto="0 -.07 0 0 .07 0" size=".055" rgba="0.23 0.28 0.34 1"/>
+          <geom name="upper_arm" fromto="0 0 0 .30 0 0" size=".035"/>
+          <body name="elbow" pos=".30 0 0">
+            <joint name="J3_elbow_pitch" axis="0 -1 0" range="-145 145"/>
+            <geom name="elbow_cylinder" fromto="0 -.055 0 0 .055 0" size=".045" rgba="0.23 0.28 0.34 1"/>
+            <geom name="forearm" fromto="0 0 0 .27 0 0" size=".029"/>
+            <body name="wrist_roll" pos=".27 0 0">
+              <joint name="J4_wrist_roll" axis="1 0 0" range="-180 180"/>
+              <geom name="wrist_roll_cylinder" fromto="0 0 0 .04 0 0" size=".032" rgba="0.23 0.28 0.34 1"/>
+              <body name="wrist_pitch" pos=".04 0 0">
+                <joint name="J5_wrist_pitch" axis="0 -1 0" range="-120 120"/>
+                <geom name="wrist_pitch_cylinder" fromto="0 -.035 0 0 .035 0" size=".031"/>
+                <body name="tool_roll" pos=".025 0 0">
+                  <joint name="J6_tool_roll" axis="1 0 0" range="-180 180"/>
+                  <geom name="tool_flange" fromto="0 0 0 .035 0 0" size=".028" rgba="0.23 0.28 0.34 1"/>
+                  <site name="tool_center" pos=".035 0 0" size=".003" rgba="0.9 0.1 0.1 1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

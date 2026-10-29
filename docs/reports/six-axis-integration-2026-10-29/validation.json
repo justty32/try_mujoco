@@ -1,0 +1,30 @@
+{
+  "build": "CMAKE_BUILD_PARALLEL_LEVEL=2 cmd.exe /c build.bat: exit 0",
+  "tests": "cmd.exe /c ctest --test-dir build --output-on-failure -j1: 3/3 PASS, 0.48 seconds",
+  "source_sha256": {
+    "assets/six_axis_arm.xml": "9bfe5e195d1982ccb41bcea9b6cbb7528cd7ae30b9b93b226231f8199060ae9f",
+    "src/controller.c": "210e2dcff3f6d950b2a755258b5090ff9b84166ffa3a9cd1095a80cf10ca1329",
+    "src/sim.c": "f2a6fdf5d9797531d6632f10ace4d1959c7c9d1b2ef88133eb33c0e45e89fbde",
+    "src/viewer.c": "6edb2a2e7a4de0472fcad0baf231f4379047892f17abba4bd3f8c462af0e40d4",
+    "tests/six_axis_arm_test.c": "3a6d697cf5648451c1ccb8a14ae0c418b380593ed014a338ca7aec88391b15a4",
+    "tests/controller_pose_test.c": "158fb4fd7b46de8426bb660034d7baad90541c1a1dd6b94f78499ac057a42c3a",
+    "tests/arm_geometry_test.c": "f87d4a25526b7b2b789d58f9e8c3d6ee5169cc156612533c9efcf0a53b0cb3b2"
+  },
+  "preview_sha256": "0ff3120cd3b7c2f55197ca811cd94ca5c7c63380dfcb80615e5b75685e505873",
+  "preview_matches_approved_bytes": true,
+  "negative_checks": [
+    {
+      "mutation": "tool_flange radius .028 -> .060",
+      "test": "six_axis_arm_test",
+      "exit_code": 1,
+      "reason": "approved cylinder dimensions"
+    },
+    {
+      "mutation": "upper_arm radius .035 -> .40",
+      "test": "arm_geometry_test",
+      "exit_code": 1,
+      "reason": "nonadjacent and ground penetration"
+    }
+  ],
+  "gui_exercised": false
+}

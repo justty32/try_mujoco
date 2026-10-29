@@ -23,7 +23,9 @@ void sim_unload(void) {
 }
 
 void sim_reset(void) {
-    mj_resetData(m, d);
+    int home = mj_name2id(m, mjOBJ_KEY, "home");
+    if (home >= 0) mj_resetDataKeyframe(m, d, home);
+    else mj_resetData(m, d);
     mj_forward(m, d);
 }
 

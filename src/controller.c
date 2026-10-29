@@ -7,15 +7,16 @@
 #define REFERENCE_SPEED (30.0 * D2R)
 
 static const char *JOINTS[CTRL_JOINT_COUNT] = {
-    "yaw1", "pitch1", "yaw2", "pitch2", "yaw3", "pitch3"
+    "J1_base_yaw", "J2_shoulder_pitch", "J3_elbow_pitch",
+    "J4_wrist_roll", "J5_wrist_pitch", "J6_tool_roll"
 };
 static const char *MOTORS[CTRL_JOINT_COUNT] = {
-    "yaw1_motor", "pitch1_motor", "yaw2_motor", "pitch2_motor", "yaw3_motor", "pitch3_motor"
+    "J1_motor", "J2_motor", "J3_motor", "J4_motor", "J5_motor", "J6_motor"
 };
 static const double PHASES[3][CTRL_JOINT_COUNT] = {
-    { 1.0, 0.0, 1.0, 0.0, 1.0, 0.0 },
-    { 0.0, 0.5, 0.0, 0.5, 0.0, 0.5 },
-    {-0.8,-0.3,-0.8,-0.3,-0.8,-0.3 }
+    { .25, 0.0, 0.0, .10, 0.0, .10 }, /* J1/J4/J6: base and rolls */
+    { 0.0, .35, .25, 0.0, .10, 0.0 }, /* J2/J3/J5: pitches */
+    {-.20,-.25,-.20,-.10,-.10,-.10 }
 };
 /* Acceleration-space PD: common 8 rad/s natural frequency and critical damping. */
 #define POSE_KP 64.0
@@ -96,6 +97,17 @@ int ctrl_set_pose_deg(const double degrees[CTRL_JOINT_COUNT]) {
         if (!isfinite(degrees[i])) return -1;
     for (int i = 0; i < CTRL_JOINT_COUNT; ++i) ctrl_set_target_deg(i, degrees[i]);
     return 0;
+}
+void ctrl_home_targets(void) {
+    if (!ready) return;
+    mjModel *m = sim_model();
+    int home = mj_name2id(m, mjOBJ_KEY, "home");
+    if (home < 0) { fprintf(stderr, "ctrl_home_targets: missing home keyframe\n"); return; }
+    double degrees[CTRL_JOINT_COUNT];
+    for (int i = 0; i < CTRL_JOINT_COUNT; ++i)
+        degrees[i] = m->key_qpos[home*m->nq + m->jnt_qposadr[joint_id[i]]] / D2R;
+    ctrl_hold_current();
+    ctrl_set_pose_deg(degrees);
 }
 void ctrl_zero_targets(void) {
     ctrl_hold_current();

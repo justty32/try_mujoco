@@ -26,8 +26,8 @@ add_executable(robot
     src/viewer.c
 )
 
-add_executable(seven_cylinders_test
-    tests/seven_cylinders_test.c
+add_executable(six_axis_arm_test
+    tests/six_axis_arm_test.c
 )
 add_executable(controller_pose_test
     tests/controller_pose_test.c
@@ -54,7 +54,7 @@ target_include_directories(robot PRIVATE
     src
     "${MUJOCO_DIR}/include"
 )
-target_include_directories(seven_cylinders_test PRIVATE
+target_include_directories(six_axis_arm_test PRIVATE
     "${MUJOCO_DIR}/include"
 )
 target_link_libraries(robot PRIVATE
@@ -62,7 +62,7 @@ target_link_libraries(robot PRIVATE
     glfw
     opengl32
 )
-target_link_libraries(seven_cylinders_test PRIVATE
+target_link_libraries(six_axis_arm_test PRIVATE
     "${MUJOCO_DIR}/lib/mujoco.lib"
 )
 
@@ -74,23 +74,23 @@ add_custom_command(TARGET robot POST_BUILD
     COMMENT "Copying mujoco.dll"
 )
 
-add_custom_command(TARGET seven_cylinders_test POST_BUILD
+add_custom_command(TARGET six_axis_arm_test POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${MUJOCO_DIR}/bin/mujoco.dll"
-        "$<TARGET_FILE_DIR:seven_cylinders_test>/mujoco.dll"
+        "$<TARGET_FILE_DIR:six_axis_arm_test>/mujoco.dll"
     COMMENT "Copying mujoco.dll for model test"
 )
 
 enable_testing()
 add_test(
-    NAME seven_cylinders_model
-    COMMAND seven_cylinders_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
+    NAME six_axis_arm_model
+    COMMAND six_axis_arm_test "${CMAKE_SOURCE_DIR}/assets/six_axis_arm.xml" "${CMAKE_SOURCE_DIR}/docs/designs/six_axis_arm/prototype-v1/model.xml"
 )
 add_test(
     NAME controller_pose
-    COMMAND controller_pose_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
+    COMMAND controller_pose_test "${CMAKE_SOURCE_DIR}/assets/six_axis_arm.xml"
 )
 add_test(
     NAME arm_geometry
-    COMMAND arm_geometry_test "${CMAKE_SOURCE_DIR}/assets/seven_cylinders.xml"
+    COMMAND arm_geometry_test "${CMAKE_SOURCE_DIR}/assets/six_axis_arm.xml"
 )
